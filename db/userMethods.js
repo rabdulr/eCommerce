@@ -18,6 +18,10 @@ const createOrder = async(userId)=> {
   return (await client.query(`UPDATE orders SET status=$1 WHERE id=$2 returning *`, [ 'ORDER', cart.id ])).rows[0];
 };
 
+const removeOrder = async(orderId)=> {
+  //add clear order
+}
+
 const addToCart = async({ productId, userId })=> {
   const cart = await getCart(userId);
   const response = await client.query(`SELECT * from "lineItems" WHERE "orderId"=$1 and "productId"=$2`, [ cart.id, productId ]);
@@ -54,5 +58,6 @@ module.exports = {
   addToCart,
   removeFromCart,
   createOrder,
-  getLineItems
+  getLineItems,
+  removeOrder
 }

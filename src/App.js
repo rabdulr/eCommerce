@@ -97,6 +97,10 @@ const App = ()=> {
     });
   };
 
+  const removeOrder = (orderId)=> {
+    axios.delete(`/api/removeFromOrder/${orderId}`, headers())
+  }
+
   const addToCart = (productId)=> {
     axios.post('/api/addToCart', { productId }, headers())
     .then( response => {
@@ -134,7 +138,7 @@ const App = ()=> {
         <div className='horizontal'>
           <Products addToCart={ addToCart } products={ products } />
           <Cart lineItems={ lineItems } removeFromCart={ removeFromCart } cart={ cart } createOrder={ createOrder } products={ products }/>
-          <Orders lineItems={ lineItems } products={ products } orders={ orders }/>
+          <Orders lineItems={ lineItems } products={ products } orders={ orders } removeOrder={ removeOrder }/>
         </div>
       </div>
     );

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Orders = ({ lineItems, orders, products })=> {
+const Orders = ({ lineItems, orders, products, removeOrder})=> {
   return (
     <div>
       <h2>Orders</h2>
@@ -33,6 +33,7 @@ const Orders = ({ lineItems, orders, products })=> {
                     })
                   }
                 </ul>
+                <button onClick={()=> removeOrder(lineItem.id)}>Remove Order</button>
               </li>
             );
           })
