@@ -65,6 +65,11 @@ const sync = async()=> {
       password: 'LARRY',
       role: null
     },
+    red: {
+      username: 'red',
+      password: 'RED',
+      role: null
+    },
   };
 
   const _products = {
