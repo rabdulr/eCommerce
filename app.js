@@ -108,7 +108,7 @@ Object.keys(models).forEach( key => {
       .catch(next);
   });
   app.post(`/api/${key}`, isLoggedIn, isAdmin, (req, res, next)=> {
-    models[key].create({ user: req.user })
+    models[key].create({ user: req.body })
       .then( items => res.send(items))
       .catch(next);
   });
