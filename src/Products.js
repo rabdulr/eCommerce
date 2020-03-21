@@ -16,7 +16,7 @@ const Products = ({ products, addToCart })=> {
                   <img src={product.image} />
                 </span>
                 <span>
-                  {
+                  Product Description: {
                     product.description
                   }
                 </span>
