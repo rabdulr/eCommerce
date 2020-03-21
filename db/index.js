@@ -1,4 +1,6 @@
 const client = require('./client');
+const faker = require('faker');
+
 
 const { authenticate, compare, findUserFromToken, hash } = require('./auth');
 
@@ -32,6 +34,8 @@ const sync = async()=> {
     CREATE TABLE products(
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
       name VARCHAR(100) NOT NULL UNIQUE,
+      image TEXT NOT NULL,
+      description TEXT NOT NULL,
       price DECIMAL NOT NULL,
       CHECK (char_length(name) > 0)
     );
@@ -92,7 +96,11 @@ const sync = async()=> {
     }
   };
   const [lucy, moe] = await Promise.all(Object.values(_users).map( user => users.create(user)));
-  const [foo, bar, bazz] = await Promise.all(Object.values(_products).map( product => products.create(product)));
+  // const [foo, bar, bazz] = await Promise.all(Object.values(_products).map( product => products.create(product)));
+
+  for(i = 0; i < 15; i++){
+    products.create({ name: `${faker.company.bsAdjective()} ${faker.commerce.product()}`, price: faker.commerce.price(), image: `${faker.image.cats()}?random=${Date.now()}`, description: faker.company.catchPhraseDescriptor()})
+  };
 
   const _orders = {
     moe: {
