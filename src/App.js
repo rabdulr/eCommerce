@@ -106,19 +106,25 @@ const App = ()=> {
     .catch(ex => console.log(ex))
   }
 
-  const addToCart = (productId)=> {
-    axios.post('/api/addToCart', { productId }, headers())
-    .then( response => {
-      const lineItem = response.data;
-      const found = lineItems.find( _lineItem => _lineItem.id === lineItem.id);
-      if(!found){
-        setLineItems([...lineItems, lineItem ]);
-      }
-      else {
-        const updated = lineItems.map(_lineItem => _lineItem.id === lineItem.id ? lineItem : _lineItem);
-        setLineItems(updated);
-      }
-    });
+  const addToCart = (productId, num)=> {
+    console.log("App.js = "+num)
+    // for(let i=0; i<num; i++){
+    //   console.log(i)
+      axios.post('/api/addToCart', { productId, num }, headers())
+      .then( response => {
+        const lineItem = response.data;
+
+        const found = lineItems.find( _lineItem => _lineItem.id === lineItem.id);
+        if(!found){
+          setLineItems([...lineItems, lineItem ])
+        }
+        else {
+          const updated = lineItems.map(_lineItem => _lineItem.id === lineItem.id ? lineItem : _lineItem);
+          // console.log(updated)
+          setLineItems(updated);
+        }
+      });
+    // }
   };
 
   const removeFromCart = (lineItemId)=> {

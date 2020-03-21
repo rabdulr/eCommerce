@@ -45,7 +45,7 @@ const sync = async()=> {
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
       "orderId" UUID REFERENCES orders(id) ON DELETE CASCADE NOT NULL,
       "productId" UUID REFERENCES products(id) NOT NULL,
-      quantity INTEGER DEFAULT 1
+      quantity INTEGER
     );
   `;
   await client.query(SQL);
