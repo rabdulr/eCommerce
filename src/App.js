@@ -43,7 +43,6 @@ const App = ()=> {
       axios.get('/api/getCart', headers())
       .then( response => {
         setCart(response.data);
-        console.log(cart)
       });
     }
   }, [ auth ]);
@@ -107,9 +106,6 @@ const App = ()=> {
   }
 
   const addToCart = (productId, num)=> {
-    console.log("App.js = "+num)
-    // for(let i=0; i<num; i++){
-    //   console.log(i)
       axios.post('/api/addToCart', { productId, num }, headers())
       .then( response => {
         const lineItem = response.data;
@@ -120,7 +116,6 @@ const App = ()=> {
         }
         else {
           const updated = lineItems.map(_lineItem => _lineItem.id === lineItem.id ? lineItem : _lineItem);
-          // console.log(updated)
           setLineItems(updated);
         }
       });

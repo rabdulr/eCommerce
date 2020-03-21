@@ -5,6 +5,7 @@ const Products = ({ products, addToCart })=> {
   return (
     <div>
       <h2>Products</h2>
+      # to add to cart <input type = 'number' min='1' max='10' value = { num } onChange = { ev => setNum(ev.target.value) } />
       <ul>
         {
           products.map( product => {
@@ -26,8 +27,7 @@ const Products = ({ products, addToCart })=> {
                   Number(product.price).toFixed(2)
                 }
                 </span>
-                <input type = 'number' min='1' max='10' value = { num } onChange = { ev => setNum(ev.target.value) } />
-                <button disabled={!num} onClick={ ()=> addToCart(product.id, num)}>Add to Cart</button>
+                <button disabled={!num} onClick={ ()=> addToCart(product.id, num)}>Add {num} to Cart</button>
               </li>
             );
           })
