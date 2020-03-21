@@ -29,7 +29,7 @@ const addToCart = async({ productId, num, userId })=> {
   let lineItem;
   if(response.rows.length){
     lineItem = response.rows[0];
-    lineItem.quantity = lineItem.quantity + num;
+    lineItem.quantity = lineItem.quantity *1 + num *1;
     return (await client.query(`UPDATE "lineItems" set quantity=$1 WHERE id = $2 returning *`, [ lineItem.quantity, lineItem.id ])).rows[0];
   }
   else {
