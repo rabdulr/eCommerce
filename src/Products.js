@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 
 const Products = ({ products, addToCart })=> {
+  const [num, setNum] = useState(0)
   return (
     <div>
       <h2>Products</h2>
@@ -17,7 +18,8 @@ const Products = ({ products, addToCart })=> {
                   Number(product.price).toFixed(2)
                 }
                 </span>
-                <button onClick={ ()=> addToCart(product.id)}>Add to Cart</button>
+                <input type = 'number' min='1' max='10' value = { num } onChange = { ev => setNum(ev.target.value) } />
+                <button disabled={!num} onClick={ ()=> addToCart(product.id, num)}>Add to Cart</button>
               </li>
             );
           })
