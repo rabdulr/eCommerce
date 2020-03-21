@@ -18,7 +18,7 @@ const Products = ({ products, addToCart })=> {
                   Number(product.price).toFixed(2)
                 }
                 </span>
-                <input type = 'number' min='0' max='10' value = { num } onChange = { ev => setNum(ev.target.value) } />
+                <input type = 'number' min='1' max='10' value = { num } onChange = { ev => setNum(ev.target.value) } />
                 <button disabled={!num} onClick={ ()=> addToCart(product.id, num)}>Add to Cart</button>
               </li>
             );
