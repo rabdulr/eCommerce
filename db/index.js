@@ -10,7 +10,8 @@ const {
   addToCart,
   removeFromCart,
   createOrder,
-  getLineItems
+  getLineItems,
+  removeOrder
 } = require('./userMethods');
 
 const sync = async()=> {
@@ -42,7 +43,7 @@ const sync = async()=> {
     );
     CREATE TABLE "lineItems"(
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-      "orderId" UUID REFERENCES orders(id) NOT NULL,
+      "orderId" UUID REFERENCES orders(id) ON DELETE CASCADE NOT NULL,
       "productId" UUID REFERENCES products(id) NOT NULL,
       quantity INTEGER DEFAULT 1
     );
@@ -126,5 +127,6 @@ module.exports = {
   addToCart,
   removeFromCart,
   createOrder,
-  getLineItems
+  getLineItems,
+  removeOrder
 };

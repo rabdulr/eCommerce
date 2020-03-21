@@ -43,6 +43,7 @@ const App = ()=> {
       axios.get('/api/getCart', headers())
       .then( response => {
         setCart(response.data);
+        console.log(cart)
       });
     }
   }, [ auth ]);
@@ -98,7 +99,11 @@ const App = ()=> {
   };
 
   const removeOrder = (orderId)=> {
-    axios.delete(`/api/removeFromOrder/${orderId}`, headers())
+    axios.delete(`/api/removeOrder/${orderId}`, headers())
+    .then( () => {
+      setOrders( orders.filter( order => order.id !== orderId))
+    })
+    .catch(ex => console.log(ex))
   }
 
   const addToCart = (productId)=> {

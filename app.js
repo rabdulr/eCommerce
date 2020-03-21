@@ -95,6 +95,12 @@ app.delete('/api/removeFromCart/:id', (req, res, next)=> {
     .catch( next );
 });
 
+app.delete('/api/removeOrder/:id', (req, res, next)=> {
+  db.removeOrder({userId: req.user.id, orderId: req.params.id})
+    .then( ()=> res.sendStatus(204))
+    .catch( next )
+})
+
 app.get('/api/products', (req, res, next)=> {
   db.models.products.read()
     .then( products => res.send(products))

@@ -1,7 +1,7 @@
 const client = require('./client');
 
 const getCart = async(userId)=> {
-  const response = await client.query(`SELECT * FROM orders WHERE status='CART' and "userId"=$1`, [userId]); 
+  const response = await client.query(`SELECT * FROM orders WHERE status='CART' and "userId"=$1`, [userId]);
   if(response.rows.length){
     return response.rows[0]; 
   }
@@ -18,8 +18,8 @@ const createOrder = async(userId)=> {
   return (await client.query(`UPDATE orders SET status=$1 WHERE id=$2 returning *`, [ 'ORDER', cart.id ])).rows[0];
 };
 
-const removeOrder = async(orderId)=> {
-  //add clear order
+const removeOrder = async({ userId, orderId})=> {
+  await client.query(`DELETE FROM orders WHERE id=$1 AND "userId"=$2 RETURNING *`, [ orderId, userId ]);
 }
 
 const addToCart = async({ productId, userId })=> {
