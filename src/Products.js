@@ -5,7 +5,7 @@ const Products = ({ products, addToCart })=> {
   return (
     <div>
       <h2>Products</h2>
-      # to add to cart <input type = 'number' min='1' max='10' value = { num } onChange = { ev => setNum(ev.target.value) } />
+      # to add to cart <input type = 'number' min='1' max='999' value = { num } onChange = { ev => setNum(ev.target.value) } />
       <ul>
         {
           products.map( product => {
