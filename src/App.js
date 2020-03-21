@@ -43,6 +43,7 @@ const App = ()=> {
       axios.get('/api/getCart', headers())
       .then( response => {
         setCart(response.data);
+        console.log(cart)
       });
     }
   }, [ auth ]);
@@ -97,6 +98,14 @@ const App = ()=> {
     });
   };
 
+  const removeOrder = (orderId)=> {
+    axios.delete(`/api/removeOrder/${orderId}`, headers())
+    .then( () => {
+      setOrders( orders.filter( order => order.id !== orderId))
+    })
+    .catch(ex => console.log(ex))
+  }
+
   const addToCart = (productId)=> {
     axios.post('/api/addToCart', { productId }, headers())
     .then( response => {
@@ -134,7 +143,7 @@ const App = ()=> {
         <div className='horizontal'>
           <Products addToCart={ addToCart } products={ products } />
           <Cart lineItems={ lineItems } removeFromCart={ removeFromCart } cart={ cart } createOrder={ createOrder } products={ products }/>
-          <Orders lineItems={ lineItems } products={ products } orders={ orders }/>
+          <Orders lineItems={ lineItems } products={ products } orders={ orders } removeOrder={ removeOrder }/>
         </div>
       </div>
     );
