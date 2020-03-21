@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import qs from 'qs';
 import axios from 'axios';
 import Login from './Login';
+import CreateUserAccount from './CreateUserAccount';
 import Orders from './Orders';
 import Cart from './Cart';
 import Products from './Products';
 
-const headers = ()=> {
+const headers = () => {
   const token = window.localStorage.getItem('token');
   return {
     headers: {
@@ -15,135 +16,144 @@ const headers = ()=> {
   };
 };
 
-const App = ()=> {
-  const [ params, setParams ] = useState(qs.parse(window.location.hash.slice(1)));
-  const [ auth, setAuth ] = useState({});
-  const [ orders, setOrders ] = useState([]);
-  const [ cart, setCart ] = useState({});
-  const [ products, setProducts ] = useState([]);
-  const [ lineItems, setLineItems ] = useState([]);
+const App = () => {
+  const [params, setParams] = useState(qs.parse(window.location.hash.slice(1)));
+  const [auth, setAuth] = useState({});
+  const [orders, setOrders] = useState([]);
+  const [cart, setCart] = useState({});
+  const [products, setProducts] = useState([]);
+  const [lineItems, setLineItems] = useState([]);
 
-  useEffect(()=> {
+  useEffect(() => {
     axios.get('/api/products')
-      .then( response => setProducts(response.data));
+      .then(response => setProducts(response.data));
   }, []);
 
-  useEffect(()=> {
-    if(auth.id){
+  useEffect(() => {
+    if (auth.id) {
       const token = window.localStorage.getItem('token');
       axios.get('/api/getLineItems', headers())
-      .then( response => {
-        setLineItems(response.data);
-      });
+        .then(response => {
+          setLineItems(response.data);
+        });
     }
-  }, [ auth ]);
-  
-  useEffect(()=> {
-    if(auth.id){
+  }, [auth]);
+
+  useEffect(() => {
+    if (auth.id) {
       axios.get('/api/getCart', headers())
-      .then( response => {
-        setCart(response.data);
-        console.log(cart)
-      });
+        .then(response => {
+          setCart(response.data);
+          console.log(cart)
+        });
     }
-  }, [ auth ]);
+  }, [auth]);
 
-  useEffect(()=> {
-    if(auth.id){
+  useEffect(() => {
+    if (auth.id) {
       axios.get('/api/getOrders', headers())
-      .then( response => {
-        setOrders(response.data);
-      });
+        .then(response => {
+          setOrders(response.data);
+        });
     }
-  }, [ auth ]);
+  }, [auth]);
 
-  const login = async(credentials)=> {
+  const login = async (credentials) => {
     const token = (await axios.post('/api/auth', credentials)).data.token;
     window.localStorage.setItem('token', token);
     exchangeTokenForAuth()
   };
 
-  const exchangeTokenForAuth = async()=> {
+  const createUserAccount = async (credentials) => {
+    const created = (await axios.post('/api/createUserAccount', credentials)).data;
+    console.log(credentials);
+    console.log(created);
+  };
+
+  const exchangeTokenForAuth = async () => {
     const response = await axios.get('/api/auth', headers());
     setAuth(response.data);
 
   };
 
-  const logout = ()=> {
+  const logout = () => {
     window.location.hash = '#';
     window.localStorage.removeItem('token');
     setAuth({});
   };
 
-  useEffect(()=> {
+  useEffect(() => {
     exchangeTokenForAuth();
   }, []);
 
-  useEffect(()=> {
-    window.addEventListener('hashchange', ()=> {
+  useEffect(() => {
+    window.addEventListener('hashchange', () => {
       setParams(qs.parse(window.location.hash.slice(1)));
     });
   }, []);
 
-  const createOrder = ()=> {
+  const createOrder = () => {
     const token = window.localStorage.getItem('token');
-    axios.post('/api/createOrder', null , headers())
-    .then( response => {
-      setOrders([response.data, ...orders]);
-      const token = window.localStorage.getItem('token');
-      return axios.get('/api/getCart', headers())
-    })
-    .then( response => {
-      setCart(response.data);
-    });
+    axios.post('/api/createOrder', null, headers())
+      .then(response => {
+        setOrders([response.data, ...orders]);
+        const token = window.localStorage.getItem('token');
+        return axios.get('/api/getCart', headers())
+      })
+      .then(response => {
+        setCart(response.data);
+      });
   };
 
-  const removeOrder = (orderId)=> {
+  const removeOrder = (orderId) => {
     axios.delete(`/api/removeOrder/${orderId}`, headers())
-    .then( () => {
-      setOrders( orders.filter( order => order.id !== orderId))
-    })
-    .catch(ex => console.log(ex))
+      .then(() => {
+        setOrders(orders.filter(order => order.id !== orderId))
+      })
+      .catch(ex => console.log(ex))
   }
 
-  const addToCart = (productId)=> {
+  const addToCart = (productId) => {
     axios.post('/api/addToCart', { productId }, headers())
-    .then( response => {
-      const lineItem = response.data;
-      const found = lineItems.find( _lineItem => _lineItem.id === lineItem.id);
-      if(!found){
-        setLineItems([...lineItems, lineItem ]);
-      }
-      else {
-        const updated = lineItems.map(_lineItem => _lineItem.id === lineItem.id ? lineItem : _lineItem);
-        setLineItems(updated);
-      }
-    });
+      .then(response => {
+        const lineItem = response.data;
+        const found = lineItems.find(_lineItem => _lineItem.id === lineItem.id);
+        if (!found) {
+          setLineItems([...lineItems, lineItem]);
+        }
+        else {
+          const updated = lineItems.map(_lineItem => _lineItem.id === lineItem.id ? lineItem : _lineItem);
+          setLineItems(updated);
+        }
+      });
   };
 
-  const removeFromCart = (lineItemId)=> {
+  const removeFromCart = (lineItemId) => {
     axios.delete(`/api/removeFromCart/${lineItemId}`, headers())
-    .then( () => {
-      setLineItems(lineItems.filter(_lineItem => _lineItem.id !== lineItemId ));
-    });
+      .then(() => {
+        setLineItems(lineItems.filter(_lineItem => _lineItem.id !== lineItemId));
+      });
   };
 
   const { view } = params;
 
-  if(!auth.id){
+  if (!auth.id) {
     return (
-      <Login login={ login }/>
+      <div>
+        <Login login={login} />
+        <CreateUserAccount createUserAccount={createUserAccount} />
+      </div>
     );
   }
   else {
     return (
       <div>
         <h1>Foo, Bar, Bazz.. etc Store</h1>
-        <button onClick={ logout }>Logout { auth.username } </button>
+        <button onClick={logout}>Logout {auth.username} </button>
         <div className='horizontal'>
-          <Products addToCart={ addToCart } products={ products } />
-          <Cart lineItems={ lineItems } removeFromCart={ removeFromCart } cart={ cart } createOrder={ createOrder } products={ products }/>
-          <Orders lineItems={ lineItems } products={ products } orders={ orders } removeOrder={ removeOrder }/>
+          <Products addToCart={addToCart} products={products} />
+          <Cart lineItems={lineItems} removeFromCart={removeFromCart} cart={cart} createOrder={createOrder} products={products} />
+          <Orders lineItems={lineItems} products={products} orders={orders} removeOrder={removeOrder} />
         </div>
       </div>
     );

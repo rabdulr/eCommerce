@@ -14,7 +14,7 @@ const {
   removeOrder
 } = require('./userMethods');
 
-const sync = async()=> {
+const sync = async () => {
   const SQL = `
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
     DROP TABLE IF EXISTS "lineItems";
@@ -88,11 +88,11 @@ const sync = async()=> {
     },
     quq: {
       name: 'quq',
-      price: 11.99 
+      price: 11.99
     }
   };
-  const [lucy, moe] = await Promise.all(Object.values(_users).map( user => users.create(user)));
-  const [foo, bar, bazz] = await Promise.all(Object.values(_products).map( product => products.create(product)));
+  const [lucy, moe] = await Promise.all(Object.values(_users).map(user => users.create(user)));
+  const [foo, bar, bazz] = await Promise.all(Object.values(_products).map(product => products.create(product)));
 
   const _orders = {
     moe: {
@@ -103,11 +103,11 @@ const sync = async()=> {
     }
   };
 
-  const userMap = (await users.read()).reduce((acc, user)=> {
+  const userMap = (await users.read()).reduce((acc, user) => {
     acc[user.username] = user;
     return acc;
   }, {});
-  const productMap = (await products.read()).reduce((acc, product)=> {
+  const productMap = (await products.read()).reduce((acc, product) => {
     acc[product.name] = product;
     return acc;
   }, {});
@@ -115,6 +115,10 @@ const sync = async()=> {
     users: userMap,
     products: productMap
   };
+};
+
+const createUserAccount = async ({ username, password }) => {
+  const SQL = 'INSERT INTO users(username, password) values($1, $2) returning *'; return (await client.query(SQL, [username, password])).rows;
 };
 
 module.exports = {
@@ -128,5 +132,6 @@ module.exports = {
   removeFromCart,
   createOrder,
   getLineItems,
-  removeOrder
+  removeOrder,
+  createUserAccount
 };
