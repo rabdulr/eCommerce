@@ -5,6 +5,7 @@ import Login from './Login';
 import Orders from './Orders';
 import Cart from './Cart';
 import Products from './Products';
+import Product from './Product';
 
 const headers = ()=> {
   const token = window.localStorage.getItem('token');
@@ -22,6 +23,7 @@ const App = ()=> {
   const [ cart, setCart ] = useState({});
   const [ products, setProducts ] = useState([]);
   const [ lineItems, setLineItems ] = useState([]);
+  
 
   useEffect(()=> {
     axios.get('/api/products')
@@ -119,7 +121,6 @@ const App = ()=> {
           setLineItems(updated);
         }
       });
-    // }
   };
 
   const removeFromCart = (lineItemId)=> {
@@ -129,7 +130,7 @@ const App = ()=> {
     });
   };
 
-  const { view } = params;
+  const { view, id } = params;
 
   if(!auth.id){
     return (
@@ -139,13 +140,25 @@ const App = ()=> {
   else {
     return (
       <div>
+        <a href='#'>
         <h1>Foo, Bar, Bazz.. etc Store</h1>
+        </a>
         <button onClick={ logout }>Logout { auth.username } </button>
-        <div className='horizontal'>
-          <Products addToCart={ addToCart } products={ products } />
-          <Cart lineItems={ lineItems } removeFromCart={ removeFromCart } cart={ cart } createOrder={ createOrder } products={ products }/>
-          <Orders lineItems={ lineItems } products={ products } orders={ orders } removeOrder={ removeOrder }/>
-        </div>
+        { !view && 
+          <div className='horizontal'>
+            <Products addToCart={ addToCart } products={ products } />
+            <Cart lineItems={ lineItems } removeFromCart={ removeFromCart } cart={ cart } createOrder={ createOrder } products={ products }/>
+            <Orders lineItems={ lineItems } products={ products } orders={ orders } removeOrder={ removeOrder }/>
+          </div>
+        }
+          {
+            view === 'product' && 
+              <Product 
+                id={id} 
+                product={ products.find(product => product.id === id)}
+                lineItem ={ lineItems.find(lineItem => lineItem.productId === id )} 
+              />
+          }
       </div>
     );
   }
