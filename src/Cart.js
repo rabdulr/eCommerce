@@ -14,7 +14,7 @@ const Cart = ({ lineItems, cart, createOrder, removeFromCart, products })=> {
                 { product && product.name}
                 { ' ' }
                 <span className='quantity'>Quantity: { lineItem.quantity }</span> 
-                <button onClick={ ()=> removeFromCart(lineItem.id)}>Remove From Cart</button>
+                <button onClick={ ()=> removeFromCart(lineItem)}>Remove From Cart</button>
               </li>
             );
           })
