@@ -97,6 +97,7 @@ const App = ()=> {
     })
     .then( response => {
       setCart(response.data);
+      setCartQuantity(0);
     });
   };
 

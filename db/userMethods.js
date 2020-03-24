@@ -23,7 +23,6 @@ const removeOrder = async({ userId, orderId})=> {
 }
 
 const addToCart = async({ productId, num, userId })=> {
-  console.log(num)
   const cart = await getCart(userId);
   const response = await client.query(`SELECT * from "lineItems" WHERE "orderId"=$1 and "productId"=$2`, [ cart.id, productId ]);
   let lineItem;
