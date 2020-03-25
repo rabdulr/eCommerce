@@ -58,16 +58,14 @@ const App = () => {
     }
   }, [auth]);
 
+  const createUserAccount = async (credentials) => {
+    const created = (await axios.post('/api/createUserAccount', credentials)).data;
+  };
+
   const login = async (credentials) => {
     const token = (await axios.post('/api/auth', credentials)).data.token;
     window.localStorage.setItem('token', token);
     exchangeTokenForAuth()
-  };
-
-  const createUserAccount = async (credentials) => {
-    const created = (await axios.post('/api/createUserAccount', credentials)).data;
-    console.log(credentials);
-    console.log(created);
   };
 
   const exchangeTokenForAuth = async () => {

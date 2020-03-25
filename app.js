@@ -78,6 +78,7 @@ app.post('/api/createOrder', (req, res, next) => {
 });
 
 app.post('/api/createUserAccount', (req, res, next) => {
+  console.log(req.body);
   db.createUserAccount(req.body)
     .then(userAccount => res.send(userAccount))
     .catch(next);

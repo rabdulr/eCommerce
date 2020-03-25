@@ -118,7 +118,8 @@ const sync = async () => {
 };
 
 const createUserAccount = async ({ username, password }) => {
-  const SQL = 'INSERT INTO users(username, password) values($1, $2) returning *'; return (await client.query(SQL, [username, password])).rows;
+  const hashed = await hash(password);
+  const SQL = 'INSERT INTO users(username, password) values($1, $2) returning *'; return (await client.query(SQL, [username, hashed])).rows[0];
 };
 
 module.exports = {
