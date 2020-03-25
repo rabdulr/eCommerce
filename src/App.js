@@ -103,6 +103,7 @@ const App = ()=> {
       setCart(response.data);
       setCartQuantity(0);
     });
+    window.location.hash = '#';
   };
 
   const removeOrder = (orderId) => {
@@ -167,15 +168,26 @@ const App = ()=> {
         <h1>Foo, Bar, Bazz.. etc Store</h1>
         </a>
         <h4>
-          Total items in cart: { cartQuantity }
+          <a href='#view=cart'>
+            Total items in cart: { cartQuantity }
+          </a>
+          <br />
+          <a href='#view=orders'>
+            Orders
+          </a>
         </h4>
         <button onClick={ logout }>Logout { auth.username } </button>
         { !view && 
           <div className='horizontal'>
             <Products addToCart={ addToCart } products={ products } />
-            <Cart lineItems={ lineItems } removeFromCart={ removeFromCart } cart={ cart } createOrder={ createOrder } products={ products }/>
-            <Orders lineItems={ lineItems } products={ products } orders={ orders } removeOrder={ removeOrder }/>
+
           </div>
+        }
+        {
+          view === 'cart' && <Cart lineItems={ lineItems } removeFromCart={ removeFromCart } cart={ cart } createOrder={ createOrder } products={ products }/>
+        }
+        {
+          view === 'orders' && <Orders lineItems={ lineItems } products={ products } orders={ orders } removeOrder={ removeOrder }/>
         }
           {
             view === 'product' && 
