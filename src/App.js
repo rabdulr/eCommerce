@@ -6,6 +6,7 @@ import CreateUserAccount from './CreateUserAccount';
 import Orders from './Orders';
 import Cart from './Cart';
 import Products from './Products';
+import Product from './Product';
 
 const headers = () => {
   const token = window.localStorage.getItem('token');
@@ -16,13 +17,13 @@ const headers = () => {
   };
 };
 
-const App = () => {
-  const [params, setParams] = useState(qs.parse(window.location.hash.slice(1)));
-  const [auth, setAuth] = useState({});
-  const [orders, setOrders] = useState([]);
-  const [cart, setCart] = useState({});
-  const [products, setProducts] = useState([]);
-  const [lineItems, setLineItems] = useState([]);
+const App = ()=> {
+  const [ params, setParams ] = useState(qs.parse(window.location.hash.slice(1)));
+  const [ auth, setAuth ] = useState({});
+  const [ orders, setOrders ] = useState([]);
+  const [ cart, setCart ] = useState({});
+  const [ products, setProducts ] = useState([]);
+  const [ lineItems, setLineItems ] = useState([]);
 
   useEffect(() => {
     axios.get('/api/products')
@@ -42,10 +43,9 @@ const App = () => {
   useEffect(() => {
     if (auth.id) {
       axios.get('/api/getCart', headers())
-        .then(response => {
-          setCart(response.data);
-          console.log(cart)
-        });
+      .then( response => {
+        setCart(response.data);
+      });
     }
   }, [auth]);
 
@@ -111,13 +111,14 @@ const App = () => {
       .catch(ex => console.log(ex))
   }
 
-  const addToCart = (productId) => {
-    axios.post('/api/addToCart', { productId }, headers())
-      .then(response => {
+  const addToCart = (productId, num)=> {
+      axios.post('/api/addToCart', { productId, num }, headers())
+      .then( response => {
         const lineItem = response.data;
-        const found = lineItems.find(_lineItem => _lineItem.id === lineItem.id);
-        if (!found) {
-          setLineItems([...lineItems, lineItem]);
+
+        const found = lineItems.find( _lineItem => _lineItem.id === lineItem.id);
+        if(!found){
+          setLineItems([...lineItems, lineItem ])
         }
         else {
           const updated = lineItems.map(_lineItem => _lineItem.id === lineItem.id ? lineItem : _lineItem);
@@ -133,7 +134,7 @@ const App = () => {
       });
   };
 
-  const { view } = params;
+  const { view, id } = params;
 
   if (!auth.id) {
     return (
@@ -146,13 +147,25 @@ const App = () => {
   else {
     return (
       <div>
+        <a href='#'>
         <h1>Foo, Bar, Bazz.. etc Store</h1>
-        <button onClick={logout}>Logout {auth.username} </button>
-        <div className='horizontal'>
-          <Products addToCart={addToCart} products={products} />
-          <Cart lineItems={lineItems} removeFromCart={removeFromCart} cart={cart} createOrder={createOrder} products={products} />
-          <Orders lineItems={lineItems} products={products} orders={orders} removeOrder={removeOrder} />
-        </div>
+        </a>
+        <button onClick={ logout }>Logout { auth.username } </button>
+        { !view && 
+          <div className='horizontal'>
+            <Products addToCart={ addToCart } products={ products } />
+            <Cart lineItems={ lineItems } removeFromCart={ removeFromCart } cart={ cart } createOrder={ createOrder } products={ products }/>
+            <Orders lineItems={ lineItems } products={ products } orders={ orders } removeOrder={ removeOrder }/>
+          </div>
+        }
+          {
+            view === 'product' && 
+              <Product 
+                id={id} 
+                product={ products.find(product => product.id === id)}
+                lineItem ={ lineItems.find(lineItem => lineItem.productId === id )} 
+              />
+          }
       </div>
     );
   }

@@ -90,10 +90,10 @@ app.get('/api/getLineItems', (req, res, next) => {
     .catch(next);
 });
 
-app.post('/api/addToCart', (req, res, next) => {
-  db.addToCart({ userId: req.user.id, productId: req.body.productId })
-    .then(lineItem => res.send(lineItem))
-    .catch(next);
+app.post('/api/addToCart', (req, res, next)=> {
+  db.addToCart({ userId: req.user.id, productId: req.body.productId , num: req.body.num})
+    .then( lineItem => res.send(lineItem))
+    .catch( next );
 });
 
 app.delete('/api/removeFromCart/:id', (req, res, next) => {
