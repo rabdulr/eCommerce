@@ -9,12 +9,14 @@ const Cart = ({ lineItems, cart, createOrder, removeFromCart, products })=> {
         {
           lineItems.filter( lineItem => lineItem.orderId === cart.id ).map( lineItem => {
             const product = products.find( product => product.id === lineItem.productId);
+            const totalItemCost = lineItem.quantity * product.price
             return (
               <li key={ lineItem.id }>
                 { product && product.name}
                 { ' ' }
-                <span className='quantity'>Quantity: { lineItem.quantity }</span> 
-                <button onClick={ ()=> removeFromCart(lineItem.id)}>Remove From Cart</button>
+                <span className='quantity'>Quantity: { lineItem.quantity }</span>
+                <span className='cart-total'>Total: ${ totalItemCost }</span> 
+                <button onClick={ ()=> removeFromCart(lineItem)}>Remove From Cart</button>
               </li>
             );
           })
