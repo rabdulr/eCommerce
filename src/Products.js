@@ -1,11 +1,25 @@
 import React, {useState, useEffect} from 'react';
 
 const Products = ({ products, addToCart })=> {
-  const [num, setNum] = useState(0)
+  const [nums, setNums] = useState(
+    products.map(p => ({id: p.id, num: 0}))
+  )
+
+  const updateNums = (id, num) => {
+    console.log(nums)
+    console.log(nums.find(item => item.id === id))
+    setNums(nums.map(n => {
+      if(n.id === id){
+        return {id: n.id, num: num*1}
+      } else {
+        return n
+      }
+    }))
+  }
+
   return (
     <div>
       <h2>Products</h2>
-      # to add to cart <input type = 'number' min='1' max='999' value = { num } onChange = { ev => setNum(ev.target.value) } />
       <ul>
         {
           products.map( product => {
@@ -21,11 +35,18 @@ const Products = ({ products, addToCart })=> {
                   Product Description: { product.description }
                 </span>
                 <span>
-                ${
-                  Number(product.price).toFixed(2)
-                }
+                  ${
+                    Number(product.price).toFixed(2)
+                  }
                 </span>
-                <button disabled={!num} onClick={ ()=> addToCart(product.id, num)}>Add {num} to Cart</button>
+                <span>
+                  <input 
+                    type = 'number' 
+                    min='1' max='999' 
+                    value = { nums.find(item => item.id === product.id).num } 
+                    onChange = { ev => updateNums(product.id, ev.target.value) } />
+                  <button onClick={ ()=> addToCart(product.id, nums.find(item => item.id === product.id).num)}>Add to Cart</button>
+                </span>
               </li>
             );
           })
