@@ -7,7 +7,7 @@ const Products = ({ products, addToCart })=> {
 
   const updateNums = (id, num) => {
     console.log(nums)
-    console.log(nums.find(item => item.id === id))
+    console.log('')
     setNums(nums.map(n => {
       if(n.id === id){
         return {id: n.id, num: num*1}
@@ -42,10 +42,14 @@ const Products = ({ products, addToCart })=> {
                 <span>
                   <input 
                     type = 'number' 
-                    min='1' max='999' 
+                    min='0' max='999'
                     value = { nums.find(item => item.id === product.id).num } 
-                    onChange = { ev => updateNums(product.id, ev.target.value) } />
-                  <button onClick={ ()=> addToCart(product.id, nums.find(item => item.id === product.id).num)}>Add to Cart</button>
+                    onChange = { ev => updateNums(product.id, ev.target.value) } 
+                  />
+                  <button 
+                    disabled = { !nums.find(item => item.id === product.id).num }
+                    onClick={ ()=> addToCart(product.id, nums.find(item => item.id === product.id).num)}
+                  >Add to Cart</button>
                 </span>
               </li>
             );
