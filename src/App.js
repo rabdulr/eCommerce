@@ -193,7 +193,8 @@ const App = ()=> {
               <Product 
                 id={id} 
                 product={ products.find(product => product.id === id)}
-                lineItem ={ lineItems.find(lineItem => lineItem.cartId === cart.id )} 
+                lineItem={ lineItems.find(lineItem => lineItem.cartId === cart.id )}
+                cart={cart}
               />
           }
       </div>
