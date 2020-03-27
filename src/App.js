@@ -115,7 +115,6 @@ const App = ()=> {
   }
 
   const addToCart = (productId, num)=> {
-    console.log(num)
       axios.post('/api/addToCart', { productId, num }, headers())
       .then( response => {
         const lineItem = response.data;
@@ -146,7 +145,6 @@ const App = ()=> {
         return acc;
       }, 0 );
       const currentCart = lineItems.filter(_lineItem => _lineItem.id !== lineItem.id );
-      console.log(currentCart)
       setLineItems(currentCart);
       setCartQuantity(itemQuantity - lineItem.quantity);
     });
@@ -195,7 +193,7 @@ const App = ()=> {
               <Product 
                 id={id} 
                 product={ products.find(product => product.id === id)}
-                lineItem ={ lineItems.find(lineItem => lineItem.productId === id )} 
+                lineItem ={ lineItems.find(lineItem => lineItem.cartId === cart.id )} 
               />
           }
       </div>

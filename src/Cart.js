@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 const Cart = ({ lineItems, cart, createOrder, removeFromCart, products })=> {
+
   return (
     <div>
       <h2>Cart - { cart.id && cart.id.slice(0, 4) }</h2>
@@ -12,7 +13,9 @@ const Cart = ({ lineItems, cart, createOrder, removeFromCart, products })=> {
             const totalItemCost = lineItem.quantity * product.price
             return (
               <li key={ lineItem.id }>
+                <a href={`#view=product&id=${product.id}`}>
                 { product && product.name}
+                </a>
                 { ' ' }
                 <span className='quantity'>Quantity: { lineItem.quantity }</span>
                 <span className='cart-total'>Total: ${ totalItemCost }</span> 

@@ -6,8 +6,6 @@ const Products = ({ products, addToCart })=> {
   )
 
   const updateNums = (id, num) => {
-    console.log(nums)
-    console.log(nums.find(item => item.id === id))
     setNums(nums.map(n => {
       if(n.id === id){
         return {id: n.id, num: num*1}
