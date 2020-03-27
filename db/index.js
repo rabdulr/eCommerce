@@ -1,7 +1,7 @@
 const client = require('./client');
 const faker = require('faker');
 
-
+ 
 const { authenticate, compare, findUserFromToken, hash } = require('./auth');
 
 const models = { products, users, orders, lineItems } = require('./models');
