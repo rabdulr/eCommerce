@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Login from './Login';
 
 const CreateUserAccount = ({ createUserAccount }) => {
     const [username, setUsername] = useState('');
@@ -16,6 +17,11 @@ const CreateUserAccount = ({ createUserAccount }) => {
             <input value={username} onChange={ev => setUsername(ev.target.value)} />
             <input type='password' value={password} onChange={ev => setPassword(ev.target.value)} />
             <button>Create Account</button>
+            <h3>
+                <a href='#'>
+                    BACK
+                </a>
+            </h3>
         </form>
     );
 };

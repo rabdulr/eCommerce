@@ -61,6 +61,10 @@ const App = ()=> {
 
   const createUserAccount = async (credentials) => {
     const created = (await axios.post('/api/createUserAccount', credentials)).data;
+    login(credentials)
+      .then( response => window.location.hash='#')
+      .catch(ex=>console.log(ex));
+    ;
   };
 
   const login = async (credentials) => {
@@ -72,7 +76,6 @@ const App = ()=> {
   const exchangeTokenForAuth = async () => {
     const response = await axios.get('/api/auth', headers());
     setAuth(response.data);
-
   };
 
   const logout = () => {
@@ -155,8 +158,15 @@ const App = ()=> {
   if (!auth.id) {
     return (
       <div>
-        <Login login={login} />
-        <CreateUserAccount createUserAccount={createUserAccount} />
+        {
+          !view && 
+          <Login login={login} />
+        }
+        {
+          view === 'CreateUser' &&
+          <CreateUserAccount createUserAccount={createUserAccount} />
+
+        }
       </div>
     );
   }
