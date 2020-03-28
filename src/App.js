@@ -32,13 +32,17 @@ const App = ()=> {
   }, []);
 
   useEffect(()=>{
-    if(lineItems.length){
+    if(lineItems.length && cart.id){
       setCartQuantity(lineItems.reduce((acc, item)=>{
-        acc = acc + item.quantity*1;
-        return acc;
+        if(item.orderId === cart.id){
+          acc = acc + item.quantity*1;
+          return acc;
+        } else {
+          return acc;
+        }
       }, 0 ));
     }
-  },[lineItems]);
+  },[lineItems, cart]);
   
   useEffect(() => {
     if (auth.id) {
