@@ -7,6 +7,7 @@ import Orders from './Orders';
 import Cart from './Cart';
 import Products from './Products';
 import Product from './Product';
+import User from './User';
 
 const headers = () => {
   const token = window.localStorage.getItem('token');
@@ -197,8 +198,15 @@ const App = ()=> {
           <a href='#view=orders'>
             Orders
           </a>
+          <br />
+          <a href='#view=user'>
+            User
+          </a>
         </h4>
         <button onClick={ logout }>Logout { auth.firstName } { auth.lastName } </button>
+        {
+          view === 'user' && <User userInfo = {auth} />
+        }
         { !view && 
           <div className='horizontal'>
             <Products addToCart={ addToCart } products={ products } />
