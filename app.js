@@ -78,7 +78,7 @@ app.post('/api/createOrder', (req, res, next) => {
 });
 
 app.post('/api/createUserAccount', (req, res, next) => {
-  db.createUserAccount(req.body)
+  db.models.users.create(req.body)
     .then(userAccount => res.send(userAccount))
     .catch(next);
 });
