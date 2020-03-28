@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 const CreateUserAccount = ({ createUserAccount }) => {
     const [ username, setUsername ] = useState('');
     const [ password, setPassword ] = useState('');
+    const [ confirmPass, setConfirmPass ] = useState('');
     const [ firstName, setFirstName ] = useState('');
     const [ lastName, setLastName ] = useState('');
     const [ address, setAddress ] = useState('');
@@ -12,7 +13,11 @@ const CreateUserAccount = ({ createUserAccount }) => {
 
     const onSubmit = (ev) => {
         ev.preventDefault();
-        createUserAccount({ username, password })
+        if(confirmPass !== password){
+            setError('Passwords do not match')
+            return;
+        };
+        createUserAccount({ username, password, firstName, lastName, address, zip, state })
             .catch(ex => setError(ex.response.data.message));
     }
     return (
@@ -26,7 +31,7 @@ const CreateUserAccount = ({ createUserAccount }) => {
             <input placeholder='state' value={state} onChange={ev => setState(ev.target.value)} />
             <input placeholder='zip' value={zip} onChange={ev => setZip(ev.target.value)} />
             <input placeholder='password' type='password' value={password} onChange={ev => setPassword(ev.target.value)} />
-            <input placeholder='confirm password' />
+            <input placeholder='confirm password' type='password' value={confirmPass} onChange={ev => setConfirmPass(ev.target.value)} />
             <button>Create Account</button>
             <h3>
                 <a href='#'>

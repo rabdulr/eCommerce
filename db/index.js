@@ -151,11 +151,6 @@ const sync = async () => {
   };
 };
 
-const createUserAccount = async ({ username, password }) => {
-  const hashed = await hash(password);
-  const SQL = 'INSERT INTO users(username, password) values($1, $2) returning *'; return (await client.query(SQL, [username, hashed])).rows[0];
-};
-
 module.exports = {
   sync,
   models,
@@ -167,6 +162,5 @@ module.exports = {
   removeFromCart,
   createOrder,
   getLineItems,
-  removeOrder,
-  createUserAccount
+  removeOrder
 };
