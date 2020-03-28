@@ -198,7 +198,7 @@ const App = ()=> {
             Orders
           </a>
         </h4>
-        <button onClick={ logout }>Logout { auth.username } </button>
+        <button onClick={ logout }>Logout { auth.firstName } { auth.lastName } </button>
         { !view && 
           <div className='horizontal'>
             <Products addToCart={ addToCart } products={ products } />
