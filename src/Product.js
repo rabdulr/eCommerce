@@ -1,14 +1,21 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 
-const Product = ({ product, lineItem, addToCart }) => {
+const Product = ({product, lineItem, addToCart}) => {
+    const [ item, setItem ] = useState([])
     const [number, setNumber] = useState(0)
     
-    return( 
+    useEffect(()=>{
+        if(lineItem){
+            setItem(lineItem)
+        }
+    }, [lineItem])
+
+    return(
         <div className='product'>
             <h1>{ product.name }</h1>
             <img src={ product.image } />
             <h3>Description: { product.description }</h3>
-            <h3>Quantity in Cart: { lineItem ? lineItem.quantity : '0' }</h3>
+            <h3>Quantity: { item.quantity }</h3>
             <span>
                 <input 
                     type = 'number' 
@@ -20,6 +27,7 @@ const Product = ({ product, lineItem, addToCart }) => {
                     disabled = { number === 0 }
                     onClick={ ()=> addToCart( product.id, number )}
                 >Add to Cart</button>
+            <h3>Quantity in Cart: { item.quantity }</h3>
             </span>
         </div>
     )
