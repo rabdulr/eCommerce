@@ -16,6 +16,11 @@ const Login = ({ login }) => {
       <input value={username} onChange={ev => setUsername(ev.target.value)} />
       <input type='password' value={password} onChange={ev => setPassword(ev.target.value)} />
       <button>Login</button>
+      <h3>
+        <a href='#view=CreateUser'>
+          Create a New User
+        </a>
+      </h3>
     </form>
   );
 };
