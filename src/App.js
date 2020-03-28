@@ -190,11 +190,10 @@ const App = ()=> {
         }
           {
             view === 'product' && 
-              <Product 
-                id={id} 
+              <Product
                 product={ products.find(product => product.id === id)}
                 lineItem={ lineItems.find(lineItem => lineItem.cartId === cart.id )}
-                cart={cart}
+                addToCart = { addToCart }
               />
           }
       </div>

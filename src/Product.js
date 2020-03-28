@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
 
-const Product = ({id, product, lineItem}) => {
+const Product = ({product, lineItem, addToCart}) => {
     const [ item, setItem ] = useState([])
+    const [number, setNumber] = useState(0)
     
     useEffect(()=>{
         if(lineItem){
@@ -15,6 +16,19 @@ const Product = ({id, product, lineItem}) => {
             <img src={ product.image } />
             <h3>Description: { product.description }</h3>
             <h3>Quantity: { item.quantity }</h3>
+            <span>
+                <input 
+                    type = 'number' 
+                    min='0' max='999'
+                    value = { number } 
+                    onChange = { ev => setNumber(ev.target.value) } 
+                />
+                <button 
+                    disabled = { number === 0 }
+                    onClick={ ()=> addToCart( product.id, number )}
+                >Add to Cart</button>
+            <h3>Quantity in Cart: { item.quantity }</h3>
+            </span>
         </div>
     )
 };
