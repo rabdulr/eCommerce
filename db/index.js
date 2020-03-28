@@ -125,7 +125,7 @@ const sync = async () => {
   // const [foo, bar, bazz] = await Promise.all(Object.values(_products).map( product => products.create(product)));
 
   for(i = 0; i < 15; i++){
-    products.create({ name: `${faker.company.bsAdjective()} ${faker.commerce.product()}`, price: faker.commerce.price(), image: `${faker.image.cats()}?random=${Date.now()}`, description: faker.company.catchPhraseDescriptor()})
+    products.create({ name: `${faker.company.bsAdjective()} ${faker.commerce.product()}`, price: faker.commerce.price(), image: `${faker.image.cats()}?random=${Math.random()*10000000000000000}`, description: faker.company.catchPhraseDescriptor()})
   };
 
   const _orders = {
