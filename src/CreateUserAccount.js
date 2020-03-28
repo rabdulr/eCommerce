@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Login from './Login';
 
 const CreateUserAccount = ({ createUserAccount }) => {
     const [ username, setUsername ] = useState('');

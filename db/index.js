@@ -25,6 +25,11 @@ const sync = async () => {
     DROP TABLE IF EXISTS products;
     CREATE TABLE users(
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      "firstName" VARCHAR(100),
+      "lastName" VARCHAR(100),
+      address VARCHAR(100),
+      state VARCHAR(25),
+      zip VARCHAR(10),
       username VARCHAR(100) NOT NULL UNIQUE,
       password VARCHAR(100) NOT NULL,
       role VARCHAR(20) DEFAULT 'USER',
@@ -56,24 +61,44 @@ const sync = async () => {
 
   const _users = {
     lucy: {
+      firstName: 'Lucy',
+      lastName: 'Granger',
+      address: '888 Hollister',
+      state: 'CA',
+      zip: '93405',
       username: 'lucy',
       password: 'LUCY',
       role: 'ADMIN'
     },
     moe: {
+      firstName: 'Moe',
+      lastName: 'Money',
+      address: '123 Murray',
+      state: 'CA',
+      zip: '93405',
       username: 'moe',
       password: 'MOE',
-      role: null
+      role: 'USER'
     },
     curly: {
+      firstName: 'Larry',
+      lastName: 'Styles',
+      address: '1440 California',
+      state: 'CA',
+      zip: '93405',
       username: 'larry',
       password: 'LARRY',
-      role: null
+      role: 'USER'
     },
     red: {
+      firstName: 'Red',
+      lastName: 'Abdul Rahim ',
+      address: '2045 Swazey',
+      state: 'CA',
+      zip: '93401',
       username: 'red',
       password: 'RED',
-      role: null
+      role: 'ADMIN'
     },
   };
 
