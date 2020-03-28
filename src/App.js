@@ -31,6 +31,15 @@ const App = ()=> {
       .then(response => setProducts(response.data));
   }, []);
 
+  useEffect(()=>{
+    if(lineItems.length){
+      setCartQuantity(lineItems.reduce((acc, item)=>{
+        acc = acc + item.quantity*1;
+        return acc;
+      }, 0 ));
+    }
+  },[lineItems]);
+  
   useEffect(() => {
     if (auth.id) {
       const token = window.localStorage.getItem('token');
