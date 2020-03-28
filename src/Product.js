@@ -10,10 +10,6 @@ const Product = ({product, lineItem, addToCart}) => {
             setItem(lineItem)
         }
     }, [lineItem])
-
-    // useEffect(()=>{
-    //     console.log()
-    // })
  
     return(
         <div className='product'>
