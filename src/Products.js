@@ -11,7 +11,18 @@ const Products = ({ products, addToCart })=> {
         return {id: n.id, num: num*1}
       } else {
         return n
-      }
+      } 
+    }))
+  }
+
+  function buttonFunction(product, thisNum){
+    addToCart(product, thisNum)
+    setNums(nums.map(n => {
+      if(n.id === product){
+        return {id: n.id, num: 0}
+      } else {
+        return n
+      } 
     }))
   }
 
@@ -21,6 +32,9 @@ const Products = ({ products, addToCart })=> {
       <ul>
         {
           products.map( product => {
+
+            let thisNum = nums.find(item => item.id === product.id).num
+
             return (
               <li key={ product.id }>
                 <span>
@@ -41,12 +55,12 @@ const Products = ({ products, addToCart })=> {
                   <input 
                     type = 'number' 
                     min='0' max='999'
-                    value = { nums.find(item => item.id === product.id).num } 
+                    value = { thisNum } 
                     onChange = { ev => updateNums(product.id, ev.target.value) } 
                   />
                   <button 
-                    disabled = { !nums.find(item => item.id === product.id).num }
-                    onClick={ ()=> addToCart(product.id, nums.find(item => item.id === product.id).num)}
+                    disabled = { !thisNum }
+                    onClick = { () => buttonFunction(product.id, thisNum) }
                   >Add to Cart</button>
                 </span>
               </li>
