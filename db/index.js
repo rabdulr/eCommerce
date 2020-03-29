@@ -13,7 +13,8 @@ const {
   removeFromCart,
   createOrder,
   getLineItems,
-  removeOrder
+  removeOrder,
+  updatePassword
 } = require('./userMethods');
 
 const sync = async () => {
@@ -28,6 +29,7 @@ const sync = async () => {
       "firstName" VARCHAR(100),
       "lastName" VARCHAR(100),
       address VARCHAR(100),
+      city VARCHAR(100),
       state VARCHAR(25),
       zip VARCHAR(10),
       username VARCHAR(100) NOT NULL UNIQUE,
@@ -64,6 +66,7 @@ const sync = async () => {
       firstName: 'Lucy',
       lastName: 'Granger',
       address: '888 Hollister',
+      city: 'San Luis Obispo',
       state: 'CA',
       zip: '93405',
       username: 'lucy',
@@ -74,6 +77,7 @@ const sync = async () => {
       firstName: 'Moe',
       lastName: 'Money',
       address: '123 Murray',
+      city: 'San Luis Obispo',
       state: 'CA',
       zip: '93405',
       username: 'moe',
@@ -84,6 +88,7 @@ const sync = async () => {
       firstName: 'Larry',
       lastName: 'Styles',
       address: '1440 California',
+      city: 'San Luis Obispo',
       state: 'CA',
       zip: '93405',
       username: 'larry',
@@ -94,6 +99,7 @@ const sync = async () => {
       firstName: 'Red',
       lastName: 'Abdul Rahim ',
       address: '2045 Swazey',
+      city: 'San Luis Obispo',
       state: 'CA',
       zip: '93401',
       username: 'red',
@@ -162,5 +168,6 @@ module.exports = {
   removeFromCart,
   createOrder,
   getLineItems,
-  removeOrder
+  removeOrder,
+  updatePassword
 };

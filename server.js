@@ -1,6 +1,14 @@
 const db = require('./db');
-const app = require('./app');
 
+try {
+  process.env = {...process.env, ...require('./env')};
+}
+catch(ex) {
+  console.log('Either add some environment variables or create an env.js file');
+  console.log(ex);
+}
+
+const app = require('./app');
 const port = process.env.PORT || 3000;
 
 db.sync()

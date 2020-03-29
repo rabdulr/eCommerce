@@ -1,4 +1,5 @@
 const client = require('./client');
+const { hash } = require('./auth');
 
 const getCart = async (userId) => {
   const response = await client.query(`SELECT * FROM orders WHERE status='CART' and "userId"=$1`, [userId]);
@@ -42,6 +43,10 @@ const removeFromCart = async ({ lineItemId, userId }) => {
   await client.query(`DELETE FROM "lineItems" WHERE id=$1 and "orderId" = $2 returning *`, [lineItemId, cart.id]);
 };
 
+const updatePassword = async ({userId, newPass}) => {
+  return (await client.query(`UPDATE users SET password=$1 WHERE id=$2 RETURNING *`, [ await hash(newPass), userId])).rows[0];
+}
+
 const getLineItems = async (userId) => {
   const SQL = `
     SELECT "lineItems".* 
@@ -60,5 +65,6 @@ module.exports = {
   removeFromCart,
   createOrder,
   getLineItems,
-  removeOrder
+  removeOrder,
+  updatePassword
 }
