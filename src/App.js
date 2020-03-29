@@ -8,6 +8,7 @@ import Cart from './Cart';
 import Products from './Products';
 import Product from './Product';
 import User from './User';
+import Reset from './Reset';
 
 const headers = () => {
   const token = window.localStorage.getItem('token');
@@ -76,7 +77,7 @@ const App = ()=> {
   const createUserAccount = async (credentials) => {
     const created = (await axios.post('/api/createUserAccount', credentials)).data;
     login(credentials)
-      .then( response => window.location.hash='#')
+      .then( () => window.location.hash='#')
       .catch(ex=>console.log(ex));
     ;
   };
@@ -167,6 +168,12 @@ const App = ()=> {
     });
   };
 
+  const resetPassword = async (credentials) => {
+    const { password, newPass } = credentials
+    const token = (await axios.post('/api/auth', { username: auth.username, password })).data.token;
+    return (await axios.put(`/api/users/${auth.id}`, { userId: auth.id, newPass}, headers()));
+  };
+
   const { view, id } = params;
 
   if (!auth.id) {
@@ -203,9 +210,13 @@ const App = ()=> {
         {
           view === 'user' && 
           <div>
-            <User userInfo = {auth} />
-            <Orders lineItems={ lineItems } products={ products } orders={ orders } removeOrder={ removeOrder }/>
+            <User userInfo = {auth} resetPassword={ resetPassword } />
+            <Orders lineItems={ lineItems } products={ products } orders={ orders } removeOrder={ removeOrder } />
           </div>
+        }
+        {
+          view === 'reset' &&
+            <Reset  userInfo = {auth} resetPassword={ resetPassword } />
         }
         { !view && 
           <div className='horizontal'>
