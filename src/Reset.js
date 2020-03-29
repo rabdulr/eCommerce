@@ -14,13 +14,16 @@ const Reset = ({ resetPassword }) => {
         }
         const credentials = { password: currentPass, newPass};
         resetPassword(credentials)
+            .then( () => {
+                alert('Password reset');
+                window.location.hash='#view=user'
+            })
             .catch(ex=> {
                 alert('Current password is incorrect');
-            });
+            })
             setCurrentPass('');
             setNewPass('');
             setConfirmNewPass('');
-            window.location.hash='#view=user';
     }
 
 

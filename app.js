@@ -106,13 +106,15 @@ app.delete('/api/removeFromCart/:id', (req, res, next) => {
 
 app.delete('/api/removeOrder/:id', (req, res, next) => {
   db.removeOrder({ userId: req.user.id, orderId: req.params.id })
-    .then(response => res.send(response).sendStatus(204))
+    .then(response => {
+      res.send(response).sendStatus(204);
+      console.log(response)})
     .catch(next)
 })
 
 app.put('/api/users/:id', (req, res, next) => {
   db.updatePassword(req.body)
-    .then(response => console.log(response))
+    .then(response => res.send(response).sendStatus(201))
     .catch(next)
 } )
 

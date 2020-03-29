@@ -170,9 +170,8 @@ const App = ()=> {
 
   const resetPassword = async (credentials) => {
     const { password, newPass } = credentials
-    const token = (await axios.post('/api/auth', { username: auth.username, password })).data.token
-    const update = (await axios.put(`/api/users/${auth.id}`, { userId: auth.id, newPass}, headers()));
-    console.log(token, update)
+    const token = (await axios.post('/api/auth', { username: auth.username, password })).data.token;
+    return (await axios.put(`/api/users/${auth.id}`, { userId: auth.id, newPass}, headers()));
   };
 
   const { view, id } = params;
