@@ -8,6 +8,7 @@ import Cart from './Cart';
 import Products from './Products';
 import Product from './Product';
 import User from './User';
+import Reset from './Reset';
 
 const headers = () => {
   const token = window.localStorage.getItem('token');
@@ -167,6 +168,10 @@ const App = ()=> {
     });
   };
 
+  const resetPassword = (credentials) => {
+    console.log(credentials)
+  };
+
   const { view, id } = params;
 
   if (!auth.id) {
@@ -203,9 +208,13 @@ const App = ()=> {
         {
           view === 'user' && 
           <div>
-            <User userInfo = {auth} />
-            <Orders lineItems={ lineItems } products={ products } orders={ orders } removeOrder={ removeOrder }/>
+            <User userInfo = {auth} resetPassword={ resetPassword } />
+            <Orders lineItems={ lineItems } products={ products } orders={ orders } removeOrder={ removeOrder } />
           </div>
+        }
+        {
+          view === 'reset' &&
+            <Reset  userInfo = {auth} resetPassword={ resetPassword } />
         }
         { !view && 
           <div className='horizontal'>

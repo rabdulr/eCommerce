@@ -6,7 +6,6 @@ const Product = ({product, lineItem, addToCart}) => {
     
     useEffect(()=>{
         if(lineItem){
-            console.log(lineItem.quantity)
             setItem(lineItem)
         }
     }, [lineItem])
