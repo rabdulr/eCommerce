@@ -17,6 +17,8 @@ const User = ({ userInfo }) => {
                 <span>{ user.lastName }</span>
             <h3>Address:</h3>
                 <span>{ user.address }</span>
+            <h3>City:</h3>
+                <span>{ user.city }</span>
             <h3>State:</h3>
                 <span>{ user.state }</span>
             <h3>Zipcode:</h3>

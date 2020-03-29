@@ -195,17 +195,17 @@ const App = ()=> {
             Total items in cart: { cartQuantity }
           </a>
           <br />
-          <a href='#view=orders'>
-            Orders
-          </a>
-          <br />
           <a href='#view=user'>
             User
           </a>
         </h4>
         <button onClick={ logout }>Logout { auth.firstName } { auth.lastName } </button>
         {
-          view === 'user' && <User userInfo = {auth} />
+          view === 'user' && 
+          <div>
+            <User userInfo = {auth} />
+            <Orders lineItems={ lineItems } products={ products } orders={ orders } removeOrder={ removeOrder }/>
+          </div>
         }
         { !view && 
           <div className='horizontal'>
@@ -215,9 +215,6 @@ const App = ()=> {
         }
         {
           view === 'cart' && <Cart lineItems={ lineItems } removeFromCart={ removeFromCart } cart={ cart } createOrder={ createOrder } products={ products }/>
-        }
-        {
-          view === 'orders' && <Orders lineItems={ lineItems } products={ products } orders={ orders } removeOrder={ removeOrder }/>
         }
           {
             view === 'product' && 
