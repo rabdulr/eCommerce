@@ -82,7 +82,7 @@ app.post('/api/createOrder', (req, res, next) => {
 
 app.post('/api/createUserAccount', (req, res, next) => {
   db.models.users.create(req.body)
-    .then(userAccount => res.send(userAccount))
+    .then(userAccount => res.send(userAccount).sendStatus(204))
     .catch(next);
 });
 
@@ -106,9 +106,15 @@ app.delete('/api/removeFromCart/:id', (req, res, next) => {
 
 app.delete('/api/removeOrder/:id', (req, res, next) => {
   db.removeOrder({ userId: req.user.id, orderId: req.params.id })
-    .then(() => res.sendStatus(204))
+    .then(response => res.send(response).sendStatus(204))
     .catch(next)
 })
+
+app.put('/api/users/:id', (req, res, next) => {
+  db.updatePassword(req.body)
+    .then(response => console.log(response))
+    .catch(next)
+} )
 
 app.get('/api/products', (req, res, next) => {
   db.models.products.read()

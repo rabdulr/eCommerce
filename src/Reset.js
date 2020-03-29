@@ -10,12 +10,17 @@ const Reset = ({ resetPassword }) => {
         ev.preventDefault();
         if( newPass !== confirmNewPass) {
             setError('Passwords do not match');
-            return
+            return;
         }
         const credentials = { password: currentPass, newPass};
-
         resetPassword(credentials)
-
+            .catch(ex=> {
+                alert('Current password is incorrect');
+            });
+            setCurrentPass('');
+            setNewPass('');
+            setConfirmNewPass('');
+            window.location.hash='#view=user';
     }
 
 

@@ -77,7 +77,7 @@ const App = ()=> {
   const createUserAccount = async (credentials) => {
     const created = (await axios.post('/api/createUserAccount', credentials)).data;
     login(credentials)
-      .then( response => window.location.hash='#')
+      .then( () => window.location.hash='#')
       .catch(ex=>console.log(ex));
     ;
   };
@@ -168,8 +168,11 @@ const App = ()=> {
     });
   };
 
-  const resetPassword = (credentials) => {
-    console.log(credentials)
+  const resetPassword = async (credentials) => {
+    const { password, newPass } = credentials
+    const token = (await axios.post('/api/auth', { username: auth.username, password })).data.token
+    const update = (await axios.put(`/api/users/${auth.id}`, { userId: auth.id, newPass}, headers()));
+    console.log(token, update)
   };
 
   const { view, id } = params;

@@ -13,7 +13,8 @@ const {
   removeFromCart,
   createOrder,
   getLineItems,
-  removeOrder
+  removeOrder,
+  updatePassword
 } = require('./userMethods');
 
 const sync = async () => {
@@ -167,5 +168,6 @@ module.exports = {
   removeFromCart,
   createOrder,
   getLineItems,
-  removeOrder
+  removeOrder,
+  updatePassword
 };
