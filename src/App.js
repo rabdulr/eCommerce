@@ -27,6 +27,7 @@ const App = ()=> {
   const [ products, setProducts ] = useState([]);
   const [ lineItems, setLineItems ] = useState([]);
   const [ cartQuantity, setCartQuantity ] = useState(0);
+  const [ visible, setVisible ] = useState({visibility:"visible"})
 
   useEffect(() => {
     axios.get('/api/products')
@@ -45,6 +46,16 @@ const App = ()=> {
       }, 0 ));
     }
   },[lineItems, cart]);
+  
+  useEffect(()=> {
+    setVisible(()=>{
+      if(cartQuantity === 0){
+        return {visibility:"hidden"}
+      } else {
+        return {visibility:"visible"}
+      }
+    })
+  }, [cartQuantity])
   
   useEffect(() => {
     if (auth.id) {
@@ -194,19 +205,22 @@ const App = ()=> {
   else {
     return (
       <div>
-        <a href='#'>
-        <h1>Foo, Bar, Bazz.. etc Store</h1>
-        </a>
-        <h4>
-          <a href='#view=cart'>
-            Total items in cart: { cartQuantity }
-          </a>
-          <br />
-          <a href='#view=user'>
-            User
-          </a>
-        </h4>
-        <button onClick={ logout }>Logout { auth.firstName } { auth.lastName } </button>
+        <header id="AppHeader">
+          <h1>UNIVERSITY GRACE SHOPPER</h1>
+          <h4>
+            <a href='#view=user'>
+              User Page
+            </a>
+            <a href='#'>
+              Browse Products
+            </a>
+            <a href='#view=cart' id="cart">
+              <img src='https://image.flaticon.com/icons/svg/57/57629.svg'></img>
+               <div style = { visible } >{ cartQuantity }</div> 
+            </a>
+          </h4>
+          <button onClick={ logout }>Logout { auth.firstName } { auth.lastName } </button>
+        </header>
         {
           view === 'user' && 
           <div>
@@ -219,7 +233,7 @@ const App = ()=> {
             <Reset  userInfo = {auth} resetPassword={ resetPassword } />
         }
         { !view && 
-          <div className='horizontal'>
+          <div  >
             <Products addToCart={ addToCart } products={ products } />
 
           </div>
