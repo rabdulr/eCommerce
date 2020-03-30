@@ -116,6 +116,12 @@ app.delete('/api/removeOrder/:id', (req, res, next) => {
       res.send(response).sendStatus(204);
       console.log(response)})
     .catch(next)
+});
+
+app.delete(`/api/guest/:id`, (req, res, next)=> {
+  db.models.users.destroyGuest(req.params)
+    .then(() => res.sendStatus(204))
+    .catch(next)
 })
 
 app.put('/api/users/:id', (req, res, next) => {

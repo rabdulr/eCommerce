@@ -182,6 +182,19 @@ const App = ()=> {
     return (await axios.put(`/api/users/${auth.id}`, { userId: auth.id, newPass}, headers()));
   };
 
+  const clearSession = () => {
+    if(confirm('Are you sure you want to erase your guest history and all associated orders?')){
+      axios.delete(`/api/guest/${auth.id}`, headers())
+        .then(() => {
+          setAuth({});
+          window.location.hash='#';
+        })
+        .catch(ex => console.log(ex))
+    } else {
+      return;
+    }
+  }
+
   const { view, id, mode } = params;
 
   if (!auth.id) {
@@ -224,7 +237,7 @@ const App = ()=> {
           }
         </h4>
         {
-          auth.role === 'GUEST' && <button onClick={ logout }>Clear Session</button>
+          auth.role === 'GUEST' && <button onClick={ clearSession }>Clear Session</button>
         }
         {
           auth.role === 'USER' || auth.role === 'ADMIN' && <button onClick={ logout }>Logout { auth.firstName } { auth.lastName } </button>

@@ -22,6 +22,10 @@ const users = {
   createGuest: async({password}) => {
     const role = 'GUEST';
     return (await client.query(`INSERT INTO users(role, password) values($1, $2) RETURNING *`, [ role, await hash(password) ])).rows[0]
+  },
+  destroyGuest: async({id})=> {
+    console.log(id)
+    await client.query(`DELETE FROM users WHERE id=$1 RETURNING *`, [id])
   }
 };
 
