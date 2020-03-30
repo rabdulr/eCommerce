@@ -80,7 +80,10 @@ const App = () => {
     login(credentials)
       .then(() => window.location.hash = '#')
       .catch(ex => console.log(ex));
-    ;
+  };
+
+  const createPromoCode = async (details) => {
+    const created = (await axios.post('/api/createPromoCode', details)).data;
   };
 
   const login = async (credentials) => {
@@ -239,7 +242,7 @@ const App = () => {
           />
         }
         {
-          view === 'admin' && <Admin></Admin>
+          view === 'admin' && <Admin createPromoCode={createPromoCode}></Admin>
         }
       </div>
     );
