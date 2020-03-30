@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const User = ({ userInfo}) => {
+const User = ({userInfo, logout}) => {
     const [ user, setUser ] = useState({})
 
     useEffect(()=> {
@@ -11,6 +11,7 @@ const User = ({ userInfo}) => {
 
     return(
         <div>
+            <h2>Account Information</h2>
             <p>Username: { user.username } </p>
             <p>First Name: { user.firstName } </p>
             <p>Last Name: { user.lastName } </p>
@@ -19,6 +20,7 @@ const User = ({ userInfo}) => {
             <p>State: { user.state } </p>
             <p>Zipcode: { user.zip } </p>
             <div>
+                <button onClick={ logout }>Logout { user.firstName } { user.lastName } </button>
                 <button onClick={() => window.location.hash='#view=reset'}>Reset Password</button>
             </div>
         </div>

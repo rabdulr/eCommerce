@@ -56,7 +56,7 @@ const App = ()=> {
       }
     })
   }, [cartQuantity])
-  
+
   useEffect(() => {
     if (auth.id) {
       const token = window.localStorage.getItem('token');
@@ -209,22 +209,21 @@ const App = ()=> {
           <h1>UNIVERSITY GRACE SHOPPER</h1>
           <h4>
             <a href='#view=user'>
-              User Page
+             <br/>Account Information
             </a>
             <a href='#'>
-              Browse Products
+              <br/>Browse Products
             </a>
             <a href='#view=cart' id="cart">
               <img src='https://image.flaticon.com/icons/svg/57/57629.svg'></img>
                <div style = { visible } >{ cartQuantity }</div> 
             </a>
           </h4>
-          <button onClick={ logout }>Logout { auth.firstName } { auth.lastName } </button>
         </header>
         {
           view === 'user' && 
           <div>
-            <User userInfo = {auth} resetPassword={ resetPassword } />
+            <User userInfo = {auth} logout={logout} resetPassword={ resetPassword } />
             <Orders lineItems={ lineItems } products={ products } orders={ orders } removeOrder={ removeOrder } />
           </div>
         }
