@@ -14,7 +14,6 @@ const Admin = ({ auth }) => {
     return (
         <div>
             <h1>Admin</h1>
-            <a href='#'>Home</a>
             <div>
                 <h2>Users</h2>
                 <ul>
