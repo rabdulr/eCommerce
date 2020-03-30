@@ -9,7 +9,7 @@ const Admin = ({ auth }) => {
                 authorization: window.localStorage.getItem('token')
             }
         })
-            .then(response => console.log(response.data));
+            .then(response => setUsers(response.data));
     }, []);
     return (
         <div>
@@ -21,7 +21,9 @@ const Admin = ({ auth }) => {
                         users.map(user => {
                             return (
                                 <li key={user.id}>
-                                    {user.username}
+                                    Username: {user.username}
+                                    <br />
+                                    Role: {user.role}
                                 </li>
                             );
                         })
