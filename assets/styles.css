@@ -203,6 +203,28 @@ li > * {
   text-transform: capitalize;
   color: brown;
 }
-/* .cartItem > .stats > a:link {
-  text-decoration: none;
+
+/* User.js */
+/* #userRoot {
 } */
+#userRoot > h2 {
+  margin: 0rem;
+  padding: 8px;
+  font-size: 40px;
+  font-style: italic;
+  text-align: center;
+  color: purple;
+  text-shadow: 3px 3px chartreuse;
+}
+/* #userRoot > p {
+
+} */
+
+/* Orders.js */
+#ordersRoot {
+  margin-top: 2rem;
+}
+#ordersRoot > ul > li{
+  background-color: lightcoral;
+  border-radius: 15px;
+}
