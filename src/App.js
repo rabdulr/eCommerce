@@ -75,7 +75,7 @@ const App = ()=> {
   }, [auth]);
 
   const createUserAccount = async (credentials) => {
-    const created = (await axios.post('/api/createUserAccount', credentials)).data;
+    const created = (await axios.post('/api/createUserAccount', credentials));
     login(credentials)
       .then( () => window.location.hash='#')
       .catch(ex=>console.log(ex));
@@ -87,6 +87,14 @@ const App = ()=> {
     window.localStorage.setItem('token', token);
     exchangeTokenForAuth()
   };
+
+  const guestSignOn = async() => {
+    const GUEST = (await axios.post('/api/createUserAccount', {password: 'GUEST'})).data;
+    GUEST.password = 'GUEST'
+    login(GUEST)
+      .then(() => window.location.hash='#')
+      .catch(ex => console.log(ex))
+  }
 
   const exchangeTokenForAuth = async () => {
     const response = await axios.get('/api/auth', headers());
@@ -181,7 +189,7 @@ const App = ()=> {
       <div>
         {
           !view && 
-          <Login login={login} />
+          <Login login={login} guestSignOn={guestSignOn}/>
         }
         {
           view === 'CreateUser' &&
@@ -206,9 +214,14 @@ const App = ()=> {
             User
           </a>
         </h4>
-        <button onClick={ logout }>Logout { auth.firstName } { auth.lastName } </button>
         {
-          view === 'user' && 
+          auth.role === 'GUEST' && <button onClick={ logout }>Clear Session</button>
+        }
+        {
+          auth.role === 'USER' || auth.role === 'ADMIN' && <button onClick={ logout }>Logout { auth.firstName } { auth.lastName } </button>
+        }
+        {
+          view === 'user' && auth.role !== 'GUEST' &&
           <div>
             <User userInfo = {auth} resetPassword={ resetPassword } />
             <Orders lineItems={ lineItems } products={ products } orders={ orders } removeOrder={ removeOrder } />

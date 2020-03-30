@@ -32,7 +32,7 @@ const sync = async () => {
       city VARCHAR(100),
       state VARCHAR(25),
       zip VARCHAR(10),
-      username VARCHAR(100) NOT NULL UNIQUE,
+      username VARCHAR(100) NOT NULL UNIQUE DEFAULT uuid_generate_v4(),
       password VARCHAR(100) NOT NULL,
       role VARCHAR(20) DEFAULT 'USER',
       CHECK (char_length(username) > 0)

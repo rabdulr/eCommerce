@@ -15,8 +15,8 @@ const Reset = ({ resetPassword }) => {
         const credentials = { password: currentPass, newPass};
         resetPassword(credentials)
             .then( () => {
-                alert('Password reset');
-                window.location.hash='#view=user'
+                alert('Password is reset');
+                window.location.hash='#view=user';
             })
             .catch(ex=> {
                 alert('Current password is incorrect');
