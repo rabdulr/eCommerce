@@ -182,7 +182,7 @@ const App = ()=> {
     return (await axios.put(`/api/users/${auth.id}`, { userId: auth.id, newPass}, headers()));
   };
 
-  const { view, id } = params;
+  const { view, id, mode } = params;
 
   if (!auth.id) {
     return (
@@ -210,9 +210,18 @@ const App = ()=> {
             Total items in cart: { cartQuantity }
           </a>
           <br />
-          <a href='#view=user'>
-            User
-          </a>
+          {
+            auth.role !== 'GUEST' &&
+            <a href='#view=user'>
+              User
+            </a>
+          }
+          {
+            auth.role === 'GUEST' && 
+            <a href='#view=orders&mode=guest'>
+              Orders
+            </a>
+          }
         </h4>
         {
           auth.role === 'GUEST' && <button onClick={ logout }>Clear Session</button>
@@ -226,6 +235,10 @@ const App = ()=> {
             <User userInfo = {auth} resetPassword={ resetPassword } />
             <Orders lineItems={ lineItems } products={ products } orders={ orders } removeOrder={ removeOrder } />
           </div>
+        }
+        {
+          mode === 'guest' &&
+            <Orders lineItems={ lineItems } products={ products } orders={ orders } removeOrder={ removeOrder } />
         }
         {
           view === 'reset' &&
