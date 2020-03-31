@@ -10,8 +10,8 @@ const User = ({userInfo, logout}) => {
     }, [userInfo]);
 
     return(
-        <div>
-            <h2>Account Information</h2>
+        <div id="userRoot">
+            <h2>Account Info !!!</h2>
             <p>Username: { user.username } </p>
             <p>First Name: { user.firstName } </p>
             <p>Last Name: { user.lastName } </p>

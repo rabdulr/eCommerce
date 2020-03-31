@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 
 const Cart = ({ lineItems, cart, createOrder, removeFromCart, products })=> {
-
+  let totalTotalItemCost = 0
   return (
     <div id="cartRoot">
       <h2>Your Cart !!!  #{ cart.id && cart.id.slice(0, 4)}</h2>
@@ -10,11 +10,12 @@ const Cart = ({ lineItems, cart, createOrder, removeFromCart, products })=> {
           lineItems.filter( lineItem => lineItem.orderId === cart.id ).map( lineItem => {
             const product = products.find( product => product.id === lineItem.productId);
             const totalItemCost = lineItem.quantity * product.price
+            totalTotalItemCost += totalItemCost
             return (
               <li key={ lineItem.id } className="cartItem">
                 <div className="stats">
                   <a href={`#view=product&id=${product.id}`}>
-                  { product && product.name}
+                    { product && product.name}
                   </a>
                   { ' ' }
                   <span className='quantity'>Quantity: { lineItem.quantity }</span>
@@ -30,7 +31,7 @@ const Cart = ({ lineItems, cart, createOrder, removeFromCart, products })=> {
           })
         }
       </ul>
-      <button disabled={ !lineItems.find( lineItem => lineItem.orderId === cart.id )} onClick={ createOrder }>Create Order</button>
+      ${totalTotalItemCost}.00 <button disabled={ !lineItems.find( lineItem => lineItem.orderId === cart.id )} onClick={ createOrder }>Place Order</button>
     </div>
   );
 };
