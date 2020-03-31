@@ -228,3 +228,25 @@ li > * {
   background-color: lightcoral;
   border-radius: 15px;
 }
+
+/* Login */
+#loginRoot > h1 {
+  margin: 0rem;
+  padding: 8px;
+  font-size: 40px;
+  font-style: italic;
+  text-align: center;
+  color: indigo;
+  text-shadow: 4px 4px rgb(142, 218, 221);
+}
+
+/* Creatie User Account */
+#createUserRoot > h1 {
+  margin: 0rem;
+  padding: 8px;
+  font-size: 40px;
+  font-style: italic;
+  text-align: center;
+  color: purple;
+  text-shadow: 3px 3px chartreuse;
+}
