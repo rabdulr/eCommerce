@@ -28,7 +28,7 @@ const Products = ({ products, addToCart })=> {
 
   return (
     <div id="ProductsRoot">
-      <h2 class="pageHeader" >Products !!!</h2>
+      <h2 className="pageHeader" >Products !!!</h2>
       <ul id="productsList">
         {
           products.map( product => {

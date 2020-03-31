@@ -27,6 +27,7 @@ const App = ()=> {
   const [ products, setProducts ] = useState([]);
   const [ lineItems, setLineItems ] = useState([]);
   const [ cartQuantity, setCartQuantity ] = useState(0);
+  const [ visible, setVisible ] = useState({visibility:"visible"})
 
   useEffect(() => {
     axios.get('/api/products')
@@ -46,6 +47,16 @@ const App = ()=> {
     }
   },[lineItems, cart]);
   
+  useEffect(()=> {
+    setVisible(()=>{
+      if(cartQuantity === 0){
+        return {visibility:"hidden"}
+      } else {
+        return {visibility:"visible"}
+      }
+    })
+  }, [cartQuantity])
+
   useEffect(() => {
     if (auth.id) {
       const token = window.localStorage.getItem('token');
@@ -215,27 +226,28 @@ const App = ()=> {
   else {
     return (
       <div>
-        <a href='#'>
-        <h1>Foo, Bar, Bazz.. etc Store</h1>
-        </a>
-        <h4>
-          <a href='#view=cart'>
-            Total items in cart: { cartQuantity }
-          </a>
-          <br />
-          {
-            auth.role !== 'GUEST' &&
-            <a href='#view=user'>
-              User
+        <header id="AppHeader">
+          <h1>UNIVERSITY GRACE SHOPPER</h1>
+          <h4>
+            { auth.role !== 'GUEST' &&
+              <a href='#view=user'>
+                <br/>Account Information
+              </a>
+            }
+            { auth.role === 'GUEST' && 
+              <a href='#view=orders&mode=guest'>
+                Orders
+              </a>
+            }
+            <a href='#'>
+              <br/>Browse Products
             </a>
-          }
-          {
-            auth.role === 'GUEST' && 
-            <a href='#view=orders&mode=guest'>
-              Orders
+            <a href='#view=cart' id="cart">
+              <img src='https://image.flaticon.com/icons/svg/57/57629.svg'></img>
+               <div style = { visible } >{ cartQuantity }</div> 
             </a>
-          }
-        </h4>
+          </h4>
+        </header>
         {
           auth.role === 'GUEST' && <button onClick={ clearSession }>Clear Session</button>
         }
@@ -245,7 +257,7 @@ const App = ()=> {
         {
           view === 'user' && auth.role !== 'GUEST' &&
           <div>
-            <User userInfo = {auth} resetPassword={ resetPassword } />
+            <User userInfo = {auth} logout={logout} resetPassword={ resetPassword } />
             <Orders lineItems={ lineItems } products={ products } orders={ orders } removeOrder={ removeOrder } />
           </div>
         }
@@ -258,7 +270,7 @@ const App = ()=> {
             <Reset  userInfo = {auth} resetPassword={ resetPassword } />
         }
         { !view && 
-          <div className='horizontal'>
+          <div  >
             <Products addToCart={ addToCart } products={ products } />
 
           </div>
