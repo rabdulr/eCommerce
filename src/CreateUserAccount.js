@@ -41,8 +41,8 @@ const CreateUserAccount = ({ createUserAccount }) => {
     }, [testAddress])
 
     return (
-        <form onSubmit={onSubmit}>
-            <h1>Create Account</h1>
+        <form onSubmit={onSubmit} id="createUserRoot">
+            <h1>Create Account !!!</h1>
             <div className='error'>{error}</div>
             <input placeholder='username' value={username} onChange={ev => setUsername(ev.target.value)} />
             <input placeholder='first name' value={firstName} onChange={ev => setFirstName(ev.target.value)} />

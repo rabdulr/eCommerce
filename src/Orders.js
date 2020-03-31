@@ -3,7 +3,7 @@ import React from 'react';
 const Orders = ({ lineItems, orders, products, removeOrder })=> {
 
   return (
-    <div>
+    <div id="ordersRoot">
       <h2>Orders</h2>
       <ul>
         {

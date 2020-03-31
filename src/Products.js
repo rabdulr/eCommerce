@@ -27,9 +27,9 @@ const Products = ({ products, addToCart })=> {
   }
 
   return (
-    <div>
-      <h2>Products</h2>
-      <ul>
+    <div id="ProductsRoot">
+      <h2 className="pageHeader" >Products !!!</h2>
+      <ul id="productsList">
         {
           products.map( product => {
 
@@ -37,28 +37,27 @@ const Products = ({ products, addToCart })=> {
 
             return (
               <li key={ product.id }>
-                <span>
+                <span className="productsName" >
                   <a href={`#view=product&id=${product.id}`}>{ product.name }</a>
                 </span>
-                <span>
+                <span className="productsImage" >
                   <img src={product.image} />
                 </span>
-                <span>
+                <span className="productsDescription" >
                   Product Description: { product.description }
                 </span>
-                <span>
+                <span className="productsAddToCart" >
                   ${
                     Number(product.price).toFixed(2)
-                  }
-                </span>
-                <span>
-                  <input 
+                  }  <input 
                     type = 'number' 
                     min='0' max='999'
+                    className="productsInput"
                     value = { thisNum } 
                     onChange = { ev => updateNums(product.id, ev.target.value) } 
                   />
-                  <button 
+                  <button
+                    className="productsButton"
                     disabled = { !thisNum }
                     onClick = { () => buttonFunction(product.id, thisNum) }
                   >Add to Cart</button>
