@@ -28,6 +28,7 @@ const App = () => {
   const [products, setProducts] = useState([]);
   const [lineItems, setLineItems] = useState([]);
   const [cartQuantity, setCartQuantity] = useState(0);
+  const [visible, setVisible] = useState({ visibility: "visible" })
 
   useEffect(() => {
     axios.get('/api/products')
@@ -46,6 +47,16 @@ const App = () => {
       }, 0));
     }
   }, [lineItems, cart]);
+
+  useEffect(() => {
+    setVisible(() => {
+      if (cartQuantity === 0) {
+        return { visibility: "hidden" }
+      } else {
+        return { visibility: "visible" }
+      }
+    })
+  }, [cartQuantity])
 
   useEffect(() => {
     if (auth.id) {
@@ -76,7 +87,7 @@ const App = () => {
   }, [auth]);
 
   const createUserAccount = async (credentials) => {
-    const created = (await axios.post('/api/createUserAccount', credentials)).data;
+    const created = (await axios.post('/api/createUserAccount', credentials));
     login(credentials)
       .then(() => window.location.hash = '#')
       .catch(ex => console.log(ex));
@@ -91,6 +102,14 @@ const App = () => {
     window.localStorage.setItem('token', token);
     exchangeTokenForAuth()
   };
+
+  const guestSignOn = async () => {
+    const GUEST = (await axios.post('/api/createUserAccount', { password: 'GUEST' })).data;
+    GUEST.password = 'GUEST'
+    login(GUEST)
+      .then(() => window.location.hash = '#')
+      .catch(ex => console.log(ex))
+  }
 
   const exchangeTokenForAuth = async () => {
     const response = await axios.get('/api/auth', headers());
@@ -178,14 +197,27 @@ const App = () => {
     return (await axios.put(`/api/users/${auth.id}`, { userId: auth.id, newPass }, headers()));
   };
 
-  const { view, id } = params;
+  const clearSession = () => {
+    if (confirm('Are you sure you want to erase your guest history and all associated orders?')) {
+      axios.delete(`/api/guest/${auth.id}`, headers())
+        .then(() => {
+          setAuth({});
+          window.location.hash = '#';
+        })
+        .catch(ex => console.log(ex))
+    } else {
+      return;
+    }
+  }
+
+  const { view, id, mode } = params;
 
   if (!auth.id) {
     return (
       <div>
         {
           !view &&
-          <Login login={login} />
+          <Login login={login} guestSignOn={guestSignOn} />
         }
         {
           view === 'CreateUser' &&
@@ -198,34 +230,53 @@ const App = () => {
   else {
     return (
       <div>
-        <a href='#'>
-          <h1>Foo, Bar, Bazz.. etc Store</h1>
-        </a>
-        <h4>
-          <a href='#view=cart'>
-            Total items in cart: {cartQuantity}
-          </a>
-          <br />
-          <a href='#view=user'>
-            User
-          </a>
-          <br />
-          {auth.role === 'ADMIN' && <a href={`#view=admin`}>ADMIN</a>}
-        </h4>
-        <button onClick={logout}>Logout {auth.firstName} {auth.lastName} </button>
+        <header id="AppHeader">
+          <h1>UNIVERSITY GRACE SHOPPER</h1>
+          <h4>
+            {auth.role !== 'GUEST' &&
+              <a href='#view=user'>
+                <br />Account Information
+              </a>
+            }
+            {auth.role === 'GUEST' &&
+              <a href='#view=orders&mode=guest'>
+                Orders
+              </a>
+            }
+            <a href='#'>
+              <br />Browse Products
+            </a>
+            <a href='#view=cart' id="cart">
+              <img src='https://image.flaticon.com/icons/svg/57/57629.svg'></img>
+              <div style={visible} >{cartQuantity}</div>
+            </a>
+            <br />
+            {auth.role === 'ADMIN' && <a href={`#view=admin`}>ADMIN</a>}
+          </h4>
+        </header>
         {
-          view === 'user' &&
+          auth.role === 'GUEST' && <button onClick={clearSession}>Clear Session</button>
+        }
+        {
+          auth.role === 'USER' || auth.role === 'ADMIN' && <button onClick={logout}>Logout {auth.firstName} {auth.lastName} </button>
+        }
+        {
+          view === 'user' && auth.role !== 'GUEST' &&
           <div>
-            <User userInfo={auth} resetPassword={resetPassword} />
+            <User userInfo={auth} logout={logout} resetPassword={resetPassword} />
             <Orders lineItems={lineItems} products={products} orders={orders} removeOrder={removeOrder} />
           </div>
+        }
+        {
+          mode === 'guest' &&
+          <Orders lineItems={lineItems} products={products} orders={orders} removeOrder={removeOrder} />
         }
         {
           view === 'reset' &&
           <Reset userInfo={auth} resetPassword={resetPassword} />
         }
         {!view &&
-          <div className='horizontal'>
+          <div  >
             <Products addToCart={addToCart} products={products} />
 
           </div>
