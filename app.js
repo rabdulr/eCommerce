@@ -3,7 +3,10 @@ const app = express();
 const path = require('path');
 const db = require('./db');
 const models = db.models;
-const ejs = require('ejs')
+const ejs = require('ejs');
+const cors = require('cors');
+const stripe = require('stripe')('pk_test_O0q8inMcz05ji9zR1e1IBK8S00pQrF1tLF');
+const uuid = require('uuid/v4');
 
 app.engine('html', ejs.renderFile);
 
@@ -11,6 +14,7 @@ app.use('/dist', express.static(path.join(__dirname, 'dist')));
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
 app.use(express.json());
+app.use(cors());
 
 const isLoggedIn = (req, res, next) => {
   if (!req.user) {
@@ -45,8 +49,36 @@ app.use((req, res, next) => {
     });
 });
 
-app.get('/', (req, res, next) => res.render(path.join(__dirname, 'index.html'), { FOO: 'BAR', GOOGLE_API_KEY}));
+app.get('/', (req, res, next) => res.render(path.join(__dirname, 'index.html'), { FOO: 'BAR', GOOGLE_API_KEY, STRIPE_KEY}));
 
+app.post('/payment', (req, res) =>{
+  const {product, token} = req.body;
+  console.log('Product', product);
+  console.log('Price', product.price);
+  const idempotencyKey = uuid();
+
+  return stripe.customers.create({
+    email: token.email,
+    source: token.id
+  })
+  .then(customer => {
+    stripe.charges.create({
+      amount: product.price * 100,
+      currency: 'usd',
+      customer: customer.id,
+      receipt_email: token.email,
+      description: product.name,
+      shipping: {
+        name: token.card.name,
+        address: {
+          country: token.card.address_country
+        }
+      }
+    }, {idempotencyKey})
+  })
+  .then(result = res.status(200).json(result))
+  .catch(ex => console.log(ex))
+});
 
 app.post('/api/auth', (req, res, next) => {
   db.authenticate(req.body)

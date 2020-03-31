@@ -1,7 +1,11 @@
-import React, {useEffect} from 'react';
+import React, {useState} from 'react';
+import StripeCheckout from 'react-stripe-checkout';
 
 const Cart = ({ lineItems, cart, createOrder, removeFromCart, products })=> {
   let totalTotalItemCost = 0
+
+  const [ purchaseOrder, setPurchaseOrder ] = useState({});
+
   return (
     <div id="cartRoot">
       <h2>Your Cart !!!  #{ cart.id && cart.id.slice(0, 4)}</h2>
@@ -32,6 +36,12 @@ const Cart = ({ lineItems, cart, createOrder, removeFromCart, products })=> {
         }
       </ul>
       ${totalTotalItemCost}.00 <button disabled={ !lineItems.find( lineItem => lineItem.orderId === cart.id )} onClick={ createOrder }>Place Order</button>
+      <br />
+      <StripeCheckout 
+        stripeKey={process.env.STRIPE_KEY}
+        token=''
+        name='Buy Items'
+      />
     </div>
   );
 };
