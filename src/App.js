@@ -86,7 +86,7 @@ const App = ()=> {
   }, [auth]);
 
   const createUserAccount = async (credentials) => {
-    const created = (await axios.post('/api/createUserAccount', credentials)).data;
+    const created = (await axios.post('/api/createUserAccount', credentials));
     login(credentials)
       .then( () => window.location.hash='#')
       .catch(ex=>console.log(ex));
@@ -98,6 +98,14 @@ const App = ()=> {
     window.localStorage.setItem('token', token);
     exchangeTokenForAuth()
   };
+
+  const guestSignOn = async() => {
+    const GUEST = (await axios.post('/api/createUserAccount', {password: 'GUEST'})).data;
+    GUEST.password = 'GUEST'
+    login(GUEST)
+      .then(() => window.location.hash='#')
+      .catch(ex => console.log(ex))
+  }
 
   const exchangeTokenForAuth = async () => {
     const response = await axios.get('/api/auth', headers());
@@ -185,14 +193,27 @@ const App = ()=> {
     return (await axios.put(`/api/users/${auth.id}`, { userId: auth.id, newPass}, headers()));
   };
 
-  const { view, id } = params;
+  const clearSession = () => {
+    if(confirm('Are you sure you want to erase your guest history and all associated orders?')){
+      axios.delete(`/api/guest/${auth.id}`, headers())
+        .then(() => {
+          setAuth({});
+          window.location.hash='#';
+        })
+        .catch(ex => console.log(ex))
+    } else {
+      return;
+    }
+  }
+
+  const { view, id, mode } = params;
 
   if (!auth.id) {
     return (
       <div>
         {
           !view && 
-          <Login login={login} />
+          <Login login={login} guestSignOn={guestSignOn}/>
         }
         {
           view === 'CreateUser' &&
@@ -208,9 +229,16 @@ const App = ()=> {
         <header id="AppHeader">
           <h1>UNIVERSITY GRACE SHOPPER</h1>
           <h4>
-            <a href='#view=user'>
-             <br/>Account Information
-            </a>
+            { auth.role !== 'GUEST' &&
+              <a href='#view=user'>
+                <br/>Account Information
+              </a>
+            }
+            { auth.role === 'GUEST' && 
+              <a href='#view=orders&mode=guest'>
+                Orders
+              </a>
+            }
             <a href='#'>
               <br/>Browse Products
             </a>
@@ -221,11 +249,21 @@ const App = ()=> {
           </h4>
         </header>
         {
-          view === 'user' && 
+          auth.role === 'GUEST' && <button onClick={ clearSession }>Clear Session</button>
+        }
+        {
+          auth.role === 'USER' || auth.role === 'ADMIN' && <button onClick={ logout }>Logout { auth.firstName } { auth.lastName } </button>
+        }
+        {
+          view === 'user' && auth.role !== 'GUEST' &&
           <div>
             <User userInfo = {auth} logout={logout} resetPassword={ resetPassword } />
             <Orders lineItems={ lineItems } products={ products } orders={ orders } removeOrder={ removeOrder } />
           </div>
+        }
+        {
+          mode === 'guest' &&
+            <Orders lineItems={ lineItems } products={ products } orders={ orders } removeOrder={ removeOrder } />
         }
         {
           view === 'reset' &&

@@ -81,9 +81,15 @@ app.post('/api/createOrder', (req, res, next) => {
 });
 
 app.post('/api/createUserAccount', (req, res, next) => {
-  db.models.users.create(req.body)
-    .then(userAccount => res.send(userAccount).sendStatus(204))
-    .catch(next);
+  if(Object.keys(req.body).length === 1){
+    db.models.users.createGuest(req.body)
+      .then(userAccount => res.send(userAccount).sendStatus(204))
+      .catch(next);
+  } else {
+    db.models.users.create(req.body)
+      .then(userAccount => res.send(userAccount).sendStatus(204))
+      .catch(next);
+  }
 });
 
 app.get('/api/getLineItems', (req, res, next) => {
@@ -109,6 +115,12 @@ app.delete('/api/removeOrder/:id', (req, res, next) => {
     .then(response => {
       res.send(response).sendStatus(204);
       console.log(response)})
+    .catch(next)
+});
+
+app.delete(`/api/guest/:id`, (req, res, next)=> {
+  db.models.users.destroyGuest(req.params)
+    .then(() => res.sendStatus(204))
     .catch(next)
 })
 
