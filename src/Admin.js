@@ -6,21 +6,21 @@ const Admin = ({ auth, createPromoCode }) => {
     const [promoCodes, setPromoCodes] = useState([]);
     const [name, setName] = useState('');
     const [percentage, setPercentage] = useState(0);
-    const [active, setActive] = useState();
+    const [active, setActive] = useState(false);
     const [error, setError] = useState('');
+
     useEffect(() => {
-        axios.get('/api/users', {
-            headers: {
-                authorization: window.localStorage.getItem('token')
-            }
-        })
-            .then(response => setUsers(response.data));
-    }, []);
-    useEffect(() => {
-        axios.get('/api/promoCodes')
-            .then(response =>
-                setPromoCodes(response.data)
-            );
+        Promise.all([
+            axios.get('/api/promoCodes'),
+            axios.get('/api/users', {
+                headers: {
+                    authorization: window.localStorage.getItem('token')
+                }
+            })
+        ]).then(responses => {
+            setPromoCodes(responses[0].data);
+            setUsers(responses[1].data);
+        });
     }, []);
 
     const onSubmit = (ev) => {
@@ -55,7 +55,7 @@ const Admin = ({ auth, createPromoCode }) => {
                                     <br />
                                 Percentage off: {code.percentage}
                                     <br />
-                                Active: {code.active}
+                                Active: {code.active.toString()}
                                 </li>
                             );
                         })
