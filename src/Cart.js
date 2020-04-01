@@ -1,10 +1,12 @@
+
 import React, {useState, useEffect} from 'react';
 import StripeCheckout from 'react-stripe-checkout';
 import axios from 'axios';
+import { isNumber } from 'util';
 
-const Cart = ({ lineItems, cart, createOrder, removeFromCart, products })=> {
+const Cart = ({ lineItems, cart, createOrder, removeFromCart, products, promos})=> {
+  const [ discount, setDiscount ] = useState(0.00)
   let totalTotalItemCost = 0
-
   const [ sale, setSale ] = useState({});
 
   useEffect(()=>{
@@ -29,7 +31,10 @@ const Cart = ({ lineItems, cart, createOrder, removeFromCart, products })=> {
 
     createOrder();
   };
-
+  const promoCheck = async()=>{
+    // const guess = await prompt("Enter Your Promo Code", "here!")
+    // console.log(guess)
+  }
   return (
     <div id="cartRoot">
       <h2>Your Cart !!!  #{ cart.id && cart.id.slice(0, 4)}</h2>
@@ -59,7 +64,7 @@ const Cart = ({ lineItems, cart, createOrder, removeFromCart, products })=> {
           })
         }
       </ul>
-      ${totalTotalItemCost}.00
+      ${totalTotalItemCost- totalTotalItemCost*discount}.00
       <br />
       <StripeCheckout 
         stripeKey='pk_test_O0q8inMcz05ji9zR1e1IBK8S00pQrF1tLF'
@@ -67,6 +72,9 @@ const Cart = ({ lineItems, cart, createOrder, removeFromCart, products })=> {
         name='Buy Items'
         amount={totalTotalItemCost * 100}
       />
+      <button disabled={ !lineItems.find( lineItem => lineItem.orderId === cart.id )} onClick={ createOrder }>Place Order</button>
+      <button onClick={ promoCheck }>Got a Promo Code? Click here!</button>
+
     </div>
   );
 };

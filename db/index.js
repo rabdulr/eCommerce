@@ -1,10 +1,10 @@
 const client = require('./client');
 const faker = require('faker');
 
- 
+
 const { authenticate, compare, findUserFromToken, hash } = require('./auth');
 
-const models = { products, users, orders, lineItems } = require('./models');
+const models = { products, users, orders, lineItems, promoCodes } = require('./models');
 
 const {
   getCart,
@@ -20,6 +20,8 @@ const {
 const sync = async () => {
   const SQL = `
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+    DROP TABLE IF EXISTS "promoCodes";
+    DROP TABLE IF EXISTS "productRatings";
     DROP TABLE IF EXISTS "lineItems";
     DROP TABLE IF EXISTS orders;
     DROP TABLE IF EXISTS users;
@@ -57,6 +59,12 @@ const sync = async () => {
       "orderId" UUID REFERENCES orders(id) ON DELETE CASCADE NOT NULL,
       "productId" UUID REFERENCES products(id) NOT NULL,
       quantity INTEGER
+    );
+    CREATE TABLE "promoCodes"(
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      name VARCHAR(250) NOT NULL UNIQUE,
+      percentage DECIMAL(3,2) NOT NULL,
+      active BOOLEAN NOT NULL
     );
   `;
   await client.query(SQL);
@@ -127,11 +135,20 @@ const sync = async () => {
     }
   };
 
-  const [lucy, moe] = await Promise.all(Object.values(_users).map( user => users.create(user)));
-  // const [foo, bar, bazz] = await Promise.all(Object.values(_products).map( product => products.create(product)));
+  const _promoCodes = {
+    opening: {
+      name: 'grand opening discount',
+      percentage: 0.15,
+      active: true
+    }
+  };
 
-  for(i = 0; i < 15; i++){
-    products.create({ name: `${faker.company.bsAdjective()} ${faker.commerce.product()}`, price: faker.commerce.price(), image: `${faker.image.cats()}?random=${Math.random()*10000000000000000}`, description: faker.company.catchPhraseDescriptor()})
+  const [lucy, moe] = await Promise.all(Object.values(_users).map(user => users.create(user)));
+  const [opening] = await Promise.all(Object.values(_promoCodes).map(promoCode => promoCodes.create(promoCode)));
+  // const [foo, bar, bazz] = await Promise.all(Object.values(_products).map(product => products.create(product)));
+
+  for (i = 0; i < 15; i++) {
+    products.create({ name: `${faker.company.bsAdjective()} ${faker.commerce.product()}`, price: faker.commerce.price(), image: `${faker.image.cats()}?random=${Math.random() * 10000000000000000}`, description: faker.company.catchPhraseDescriptor() })
   };
 
   const _orders = {
@@ -151,9 +168,14 @@ const sync = async () => {
     acc[product.name] = product;
     return acc;
   }, {});
+  const promoCodeMap = (await promoCodes.read()).reduce((acc, promoCode) => {
+    acc[promoCode.name] = promoCode;
+    return acc;
+  }, {});
   return {
     users: userMap,
-    products: productMap
+    products: productMap,
+    promoCodes: promoCodeMap
   };
 };
 
