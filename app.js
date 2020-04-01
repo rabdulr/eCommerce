@@ -52,9 +52,8 @@ app.use((req, res, next) => {
 app.get('/', (req, res, next) => res.render(path.join(__dirname, 'index.html'), { FOO: 'BAR', GOOGLE_API_KEY}));
 
 app.post('/payment', (req, res) =>{
-  const {product, token} = req.body;
-  console.log('Product', product);
-  console.log('Price', product.price);
+  console.log(req.body)
+  const {sale, token} = req.body;
   const idempotencyKey = uuid();
 
   return stripe.customers.create({
@@ -63,20 +62,21 @@ app.post('/payment', (req, res) =>{
   })
   .then(customer => {
     stripe.charges.create({
-      amount: product.price * 100,
+      amount: sale.price * 100,
       currency: 'usd',
       customer: customer.id,
       receipt_email: token.email,
-      description: product.name,
+      description: sale.name,
       shipping: {
         name: token.card.name,
         address: {
+          line1: 'Test',
           country: token.card.address_country
         }
       }
     }, {idempotencyKey})
   })
-  .then(result = res.status(200).json(result))
+  .then(result = res.status(200))
   .catch(ex => console.log(ex))
 });
 
