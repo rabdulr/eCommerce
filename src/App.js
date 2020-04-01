@@ -29,7 +29,7 @@ const App = () => {
   const [lineItems, setLineItems] = useState([]);
   const [cartQuantity, setCartQuantity] = useState(0);
   const [visible, setVisible] = useState({ visibility: "visible" });
-  const [promoCode, setPromoCode] = useState([]);
+  const [promoCodes, setPromoCodes] = useState([]);
 
   useEffect(() => {
     axios.get('/api/products')
@@ -88,7 +88,7 @@ const App = () => {
   }, [auth]);
 
   useEffect(() => {
-    axios.get('/api/getPromoCodes')
+    axios.get('/api/promoCodes')
       .then(response => {
         setPromoCodes(response.data);
       });
@@ -289,7 +289,7 @@ const App = () => {
           </div>
         }
         {
-          view === 'cart' && <Cart lineItems={lineItems} removeFromCart={removeFromCart} cart={cart} createOrder={createOrder} products={products} />
+          view === 'cart' && <Cart lineItems={lineItems} removeFromCart={removeFromCart} cart={cart} createOrder={createOrder} products={products} promos={promoCodes} />
         }
         {
           view === 'product' &&
