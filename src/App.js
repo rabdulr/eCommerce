@@ -248,7 +248,7 @@ const App = () => {
             }
             {auth.role === 'GUEST' &&
               <a href='#view=orders&mode=guest'>
-                Orders
+                <br/>Orders
               </a>
             }
             <a href='#'>
@@ -260,13 +260,13 @@ const App = () => {
             </a>
             {auth.role === 'ADMIN' && <a href={`#view=admin`}>ADMIN</a>}
           </h4>
-        </header>
         {
           auth.role === 'GUEST' && <button onClick={clearSession}>Clear Session</button>
         }
         {
           auth.role === 'USER' || auth.role === 'ADMIN' && <button onClick={logout}>Logout {auth.firstName} {auth.lastName} </button>
         }
+        </header>
         {
           view === 'user' && auth.role !== 'GUEST' &&
           <div>
