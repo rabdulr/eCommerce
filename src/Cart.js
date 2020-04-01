@@ -16,9 +16,10 @@ const Cart = ({ lineItems, cart, createOrder, removeFromCart, products })=> {
       .then(response => {
         console.log('Response', response);
         const { status } = response;
-        console.log('Status', status)
+        console.log('Status', status);
+        createOrder();
       })
-      .catch(err => console.log(error))
+      .catch(err => console.log(err))
   };
 
   return (
@@ -42,7 +43,7 @@ const Cart = ({ lineItems, cart, createOrder, removeFromCart, products })=> {
                   <button onClick={ ()=> removeFromCart(lineItem)}>Remove From Cart</button>
                 </div>
                 <div className="imgDiv">
-                  <img src='https://image.flaticon.com/icons/svg/57/57629.svg' class="cartOverlay"></img>
+                  <img src='https://image.flaticon.com/icons/svg/57/57629.svg' className="cartOverlay"></img>
                   <img src={product.image}></img>
                 </div>
               </li>
