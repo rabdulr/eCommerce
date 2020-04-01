@@ -300,7 +300,8 @@ const App = () => {
           />
         }
         {
-          view === 'admin' && <Admin createPromoCode={createPromoCode}></Admin>
+          view === 'admin' && <Admin createPromoCode={createPromoCode}>
+            <br /></Admin>
         }
       </div>
     );
