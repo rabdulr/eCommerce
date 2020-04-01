@@ -5,7 +5,7 @@ const db = require('./db');
 const models = db.models;
 const ejs = require('ejs');
 const cors = require('cors');
-const stripe = require('stripe')('pk_test_O0q8inMcz05ji9zR1e1IBK8S00pQrF1tLF');
+const stripe = require('stripe')(process.env.STRIPE_KEY_SECRET);
 const uuid = require('uuid/v4');
 
 app.engine('html', ejs.renderFile);
@@ -49,7 +49,7 @@ app.use((req, res, next) => {
     });
 });
 
-app.get('/', (req, res, next) => res.render(path.join(__dirname, 'index.html'), { FOO: 'BAR', GOOGLE_API_KEY, STRIPE_KEY}));
+app.get('/', (req, res, next) => res.render(path.join(__dirname, 'index.html'), { FOO: 'BAR', GOOGLE_API_KEY}));
 
 app.post('/payment', (req, res) =>{
   const {product, token} = req.body;

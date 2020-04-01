@@ -1,10 +1,25 @@
 import React, {useState} from 'react';
 import StripeCheckout from 'react-stripe-checkout';
+import axios from 'axios';
 
 const Cart = ({ lineItems, cart, createOrder, removeFromCart, products })=> {
   let totalTotalItemCost = 0
 
-  const [ purchaseOrder, setPurchaseOrder ] = useState({});
+  const makePayment = token => {
+    const body = {
+      token, 
+    }
+    const headers = {
+      'Content-Type': 'application/json'
+    }
+    axios.post(`http://localhost:3000/payment`, headers, body)
+      .then(response => {
+        console.log('Response', response);
+        const { status } = response;
+        console.log('Status', status)
+      })
+      .catch(err => console.log(error))
+  };
 
   return (
     <div id="cartRoot">
@@ -38,9 +53,10 @@ const Cart = ({ lineItems, cart, createOrder, removeFromCart, products })=> {
       ${totalTotalItemCost}.00 <button disabled={ !lineItems.find( lineItem => lineItem.orderId === cart.id )} onClick={ createOrder }>Place Order</button>
       <br />
       <StripeCheckout 
-        stripeKey={process.env.STRIPE_KEY}
-        token=''
+        stripeKey='pk_test_O0q8inMcz05ji9zR1e1IBK8S00pQrF1tLF'
+        token={makePayment}
         name='Buy Items'
+        amount={totalTotalItemCost * 100}
       />
     </div>
   );
