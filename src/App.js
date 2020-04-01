@@ -250,7 +250,6 @@ const App = () => {
               <img src='https://image.flaticon.com/icons/svg/57/57629.svg'></img>
               <div style={visible} >{cartQuantity}</div>
             </a>
-            <br />
             {auth.role === 'ADMIN' && <a href={`#view=admin`}>ADMIN</a>}
           </h4>
         </header>

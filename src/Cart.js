@@ -1,7 +1,15 @@
-import React, {useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
+import { isNumber } from 'util';
 
-const Cart = ({ lineItems, cart, createOrder, removeFromCart, products })=> {
+const Cart = ({ lineItems, cart, createOrder, removeFromCart, products, promos})=> {
+  const [ discount, setDiscount ] = useState(0.00)
   let totalTotalItemCost = 0
+  
+  const promoCheck = async()=>{
+    // const guess = await prompt("Enter Your Promo Code", "here!")
+    // console.log(guess)
+  }
+  
   return (
     <div id="cartRoot">
       <h2>Your Cart !!!  #{ cart.id && cart.id.slice(0, 4)}</h2>
@@ -31,7 +39,9 @@ const Cart = ({ lineItems, cart, createOrder, removeFromCart, products })=> {
           })
         }
       </ul>
-      ${totalTotalItemCost}.00 <button disabled={ !lineItems.find( lineItem => lineItem.orderId === cart.id )} onClick={ createOrder }>Place Order</button>
+      ${totalTotalItemCost - totalTotalItemCost*discount}.00
+      <button disabled={ !lineItems.find( lineItem => lineItem.orderId === cart.id )} onClick={ createOrder }>Place Order</button>
+      <button onClick={ promoCheck }>Got a Promo Code? Click here!</button>
     </div>
   );
 };

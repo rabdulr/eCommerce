@@ -1,7 +1,7 @@
 const db = require('./db');
 
 try {
-  process.env = {...process.env, ...require('./env')};
+  process.env = {...process.env, ...require('./.env')};
 }
 catch(ex) {
   console.log('Either add some environment variables or create an env.js file');
