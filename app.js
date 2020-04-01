@@ -3,7 +3,7 @@ const app = express();
 const path = require('path');
 const db = require('./db');
 const models = db.models;
-const ejs = require('ejs')
+const ejs = require('ejs');
 
 app.engine('html', ejs.renderFile);
 
@@ -45,7 +45,7 @@ app.use((req, res, next) => {
     });
 });
 
-app.get('/', (req, res, next) => res.render(path.join(__dirname, 'index.html'), { FOO: 'BAR', GOOGLE_API_KEY}));
+app.get('/', (req, res, next) => res.render(path.join(__dirname, 'index.html'), { FOO: 'BAR', GOOGLE_API_KEY }));
 
 
 app.post('/api/auth', (req, res, next) => {
@@ -92,16 +92,22 @@ app.post('/api/createUserAccount', (req, res, next) => {
   }
 });
 
+app.post('/api/createPromoCode', (req, res, next) => {
+  db.models.promoCodes.create(req.body)
+    .then(promoCode => res.send(promoCode).sendStatus(204))
+    .catch(next);
+});
+
 app.get('/api/getLineItems', (req, res, next) => {
   db.getLineItems(req.user.id)
     .then(lineItems => res.send(lineItems))
     .catch(next);
 });
 
-app.post('/api/addToCart', (req, res, next)=> {
-  db.addToCart({ userId: req.user.id, productId: req.body.productId , num: req.body.num})
-    .then( lineItem => res.send(lineItem))
-    .catch( next );
+app.post('/api/addToCart', (req, res, next) => {
+  db.addToCart({ userId: req.user.id, productId: req.body.productId, num: req.body.num })
+    .then(lineItem => res.send(lineItem))
+    .catch(next);
 });
 
 app.delete('/api/removeFromCart/:id', (req, res, next) => {
@@ -114,7 +120,8 @@ app.delete('/api/removeOrder/:id', (req, res, next) => {
   db.removeOrder({ userId: req.user.id, orderId: req.params.id })
     .then(response => {
       res.send(response).sendStatus(204);
-      console.log(response)})
+      console.log(response)
+    })
     .catch(next)
 });
 
@@ -128,11 +135,17 @@ app.put('/api/users/:id', (req, res, next) => {
   db.updatePassword(req.body)
     .then(response => res.send(response).sendStatus(201))
     .catch(next)
-} )
+})
 
 app.get('/api/products', (req, res, next) => {
   db.models.products.read()
     .then(products => res.send(products))
+    .catch(next);
+});
+
+app.get('/api/promoCodes', (req, res, next) => {
+  db.models.promoCodes.read()
+    .then(promoCodes => res.send(promoCodes))
     .catch(next);
 });
 
